@@ -1,29 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import style from "./Style.module.css";
+import edit_logo from "../../assets/edit.png";
+import delete_logo from "../../assets/delete.png";
+import share_logo from "../../assets/share.png";
 
-const Quizanalysis = () => {
+const QuizAnalysis = () => {
   const [quizzes, setQuizzes] = useState([]);
   const [questionCount, setQuestionCount] = useState(0);
   const [totalQuizImpressions, setTotalQuizImpressions] = useState(0);
-  const icons = '⭐️⭐️⭐️';
+  const icons = "⭐️⭐️⭐️";
 
   useEffect(() => {
     // Fetch quizzes with respective impressions when the component mounts
     const fetchDashboardData = async () => {
       try {
-        const userId = localStorage.getItem('userId'); // Assuming you store userId in localStorage
+        const userId = localStorage.getItem("userId"); // Assuming you store userId in localStorage
 
         // Fetch quizzes with impressions
-        const quizResponse = await axios.get(`http://localhost:3000/api/quizzesWithImpressions/${userId}`);
+        const quizResponse = await axios.get(
+          `http://localhost:3000/api/quizzesWithImpressions/${userId}`
+        );
         const fetchedQuizzes = quizResponse.data.quizzes;
-        
+
         // Calculate total quiz impressions
-        const totalQuizImpressions = fetchedQuizzes.reduce((total, quiz) => total + quiz.impressionofQuiz, 0);
+        const totalQuizImpressions = fetchedQuizzes.reduce(
+          (total, quiz) => total + quiz.impressionofQuiz,
+          0
+        );
         setTotalQuizImpressions(totalQuizImpressions);
 
         setQuizzes(fetchedQuizzes);
 
-        const questionResponse = await axios.get(`http://localhost:3000/api/questionCount/${userId}`);
+        const questionResponse = await axios.get(
+          `http://localhost:3000/api/questionCount/${userId}`
+        );
         setQuestionCount(questionResponse.data.questionCount);
       } catch (error) {
         console.error(error);
@@ -34,72 +45,86 @@ const Quizanalysis = () => {
   }, []);
 
   function formatDate(dateString) {
-    const options = { day: 'numeric', month: 'short', year: 'numeric' };
+    const options = { day: "numeric", month: "short", year: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   }
 
+  const handleEditQuiz = (quizId) => {
+    // Logic to handle editing quiz with the given quizId
+    console.log(`Editing quiz with ID: ${quizId}`);
+  };
+
+  const handleDeleteQuiz = (quizId) => {
+    // Logic to handle deleting quiz with the given quizId
+    console.log(`Deleting quiz with ID: ${quizId}`);
+  };
+
+  const handleShareQuiz = (quizId) => {
+    // Logic to handle sharing quiz with the given quizId
+    
+    console.log(`Sharing quiz with ID: ${quizId}`);
+  };
+
   return (
-    // <div>
-    //   <ul>
-    //     {quizzes.map((quiz,index) => (
-    //       <li key={quiz._id}>
-    //         <strong>{quiz.quizName}</strong> - Impressions: {quiz.impressionofQuiz}
-    //         <p>- created on: {quiz.date}</p> 
-    //     <p>
-    //         <a href={`/question-analysis/${quiz._id}`}>Question Analytics</a>
-    //     </p>
-    //       </li>
-    //     ))}
-    //   </ul>
-    // </div>
     <div>
+      <div className={style.header}>Quiz Analysis</div>
 
-      <div style={{ color: '#5076FF', fontFamily: 'Poppins', fontSize: '50px', fontStyle: 'normal', fontWeight: 600, lineHeight: 'normal' ,marginTop:'60px',marginLeft:'374px'}}>
-          Quiz Analysis
-      </div>
-
-
-      <div style={{width:'75vw',marginLeft:'83px',marginTop:'53px'}}>
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-        <thead>
-        <tr style={{
-          backgroundColor: 'rgba(80, 118, 255, 1)',
-          color: '#fff',
-          height: '35px',
-          flexShrink: 0,
-          textAlign: 'center',
-          fontFamily: 'Poppins',
-          fontSize: '16px',
-          fontStyle: 'normal',
-          fontWeight: 600,
-          lineHeight: '40px', /* 250% */
-          border:'1px',
-          borderRadius: '10px',
-}}>
-            <th>S.No</th>
-            <th>Quiz Name</th>
-            <th>Created On</th>
-            <th>Impression</th>
-            <th>Icons</th>
-            <th>Question-wise Analysis</th>
-          </tr>
-        </thead>
-        <tbody>
-          {quizzes.map((quiz, index) => (
-            <tr key={index} style={{ backgroundColor: index % 2 === 0 ? 'none' : 'rgba(179, 196, 255, 1)' ,textAlign: 'center',}}>
-              <td>{index + 1}</td>
-              <td>{quiz.quizName}</td>
-              <td>{formatDate(quiz.date)}</td>
-              <td>{quiz.impressionofQuiz}</td>
-              <td>{icons}</td>
-              <td>{<a href={`/question-analysis/${quiz._id}`}>Question Analytics</a>}</td>
+      <div className={style.quizTable}>
+        <table className={style.tableHeader}>
+          <thead>
+            <tr className={style.header_table_row}>
+              <th>S.No</th>
+              <th>Quiz Name</th>
+              <th>Created On</th>
+              <th>Impression</th>
+              <th>Icons</th>
+              <th>Question-wise Analysis</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {quizzes.map((quiz, index) => (
+              <tr
+                key={index}
+                className={`${style.myStyledElement} ${
+                  index % 2 === 0 ? "" : style.odd
+                }`}
+              >
+                <td>{index + 1}</td>
+                <td>{quiz.quizName}</td>
+                <td>{formatDate(quiz.date)}</td>
+                <td>{quiz.impressionofQuiz}</td>
+                <td>
+                  {/* {icons} */}
+
+                  {/* Edit button */}
+                  <button onClick={() => handleEditQuiz(quiz._id)}>
+                    <img src={edit_logo} alt="edit_logo" />
+                  </button>
+
+                  {/* Delete button */}
+                  <button onClick={() => handleDeleteQuiz(quiz._id)}>
+                    <img src={delete_logo} alt="delete_logo" />
+                  </button>
+
+                  {/* Share button (you can use a link or a custom share function) */}
+                  <button onClick={() => handleShareQuiz(quiz._id)}>
+                    <img src={share_logo} alt="share_logo" />
+                  </button>
+                </td>
+                <td>
+                  {
+                    <a href={`/question-analysis/${quiz._id}`}>
+                      Question Analytics
+                    </a>
+                  }
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
 
-export default Quizanalysis;
+export default QuizAnalysis;

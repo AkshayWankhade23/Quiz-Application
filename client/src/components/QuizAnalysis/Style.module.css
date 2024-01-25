@@ -1,0 +1,48 @@
+
+
+.header {
+  color: #5076ff;
+  font-family: Poppins;
+  font-size: 50px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin-top: 60px;
+  margin-left: 374px;
+}
+
+.quizTable {
+  width: 75vw;
+  margin-left: 83px;
+  margin-top: 53px;
+}
+
+.tableHeader {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.header_table_row {
+  background-color: rgba(80, 118, 255, 1);
+  color: #fff;
+  height: 35px;
+  flex-shrink: 0;
+  text-align: center;
+  font-family: Poppins;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 40px;
+  border: 1px;
+  border-radius: 10px;
+}
+
+.myStyledElement {
+  border-radius: 10px;
+  text-align: center;
+}
+
+.odd {
+  border-radius: 10px;
+  background-color: rgba(179, 196, 255, 1); 
+}
