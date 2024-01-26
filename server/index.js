@@ -216,6 +216,53 @@ app.post('/api/updateQuiz', async (req, res) => {
   }
 });
 
+// API endpoint to delete a quiz by its ID
+app.delete('/api/deleteQuiz/:quizId', async (req, res) => {
+  try {
+    const quizId = req.params.quizId;
+
+    // Find the quiz by ID and delete it
+    const deletedQuiz = await Quiz.findByIdAndDelete(quizId);
+    if (!deletedQuiz) {
+      return res.status(404).json({ error: 'Quiz not found' });
+    }
+
+    res.status(200).json({ success: true, message: 'Quiz deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+// PATCH endpoint for updating a quiz
+app.patch('/api/editQuiz/:quizId', async (req, res) => {
+  try {
+    const quizId = req.params.quizId;
+    const { questions } = req.body;
+
+    // Find the quiz by quizId in the database
+    const quiz = await Quiz.findById(quizId);
+    if (!quiz) {
+      return res.status(404).json({ success: false, error: 'Quiz not found' });
+    }
+
+    // Update only the questions and options values
+    quiz.questions = questions;
+
+    // Save the updated quiz
+    const updatedQuiz = await quiz.save();
+
+    // Send success response with updated quiz data
+    res.status(200).json({ success: true, updatedQuiz });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

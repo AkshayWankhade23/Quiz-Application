@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { toast } from "react-hot-toast";
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -20,7 +21,7 @@ const Signup = () => {
 
     // Basic password matching validation
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords don't match");
+      toast.error("password doesn’t match");
       return;
     }
 
@@ -37,7 +38,7 @@ const Signup = () => {
 
       // Redirect to another page or perform any other actions after successful signup
       navigate('/create-quiz')
-      alert('Signup successful!');
+      toast.success('Signup successful!');
 
     } catch (error) {
       console.error('Signup error:', error.response.data.error || 'Internal Server Error');

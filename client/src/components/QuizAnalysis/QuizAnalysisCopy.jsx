@@ -4,8 +4,8 @@ import style from "./Style.module.css";
 import edit_logo from "../../assets/edit.png";
 import delete_logo from "../../assets/delete.png";
 import share_logo from "../../assets/share.png";
-import EditQuiz from "../EditQuiz/EditQuiz";
-import { toast } from "react-hot-toast";
+import CreateQuiz from "../CreateQuiz/CreateQuiz";
+// import { useQuizData } from "../../Context/QuizDataContext"
 
 const QuizAnalysis = () => {
   const [quizzes, setQuizzes] = useState([]);
@@ -13,9 +13,7 @@ const QuizAnalysis = () => {
   const [totalQuizImpressions, setTotalQuizImpressions] = useState(0);
   const [deleted, setDeleted] = useState(false);
   const [showCreateQuizPopup, setShowCreateQuizPopup] = useState(false);
-  const [selectedQuizData, setSelectedQuizData] = useState(null);
-  const [showDeleteQuizPopup, setShowDeleteQuizPopup] = useState(false);
-  const [quizToDelete, setQuizToDelete] = useState(null);
+  // const icons = "⭐️⭐️⭐️";
 
   useEffect(() => {
     // Fetch quizzes with respective impressions when the component mounts
@@ -56,78 +54,48 @@ const QuizAnalysis = () => {
   }
 
   const handleEditQuiz = async (quizId, updatedData) => {
+    // Set the state to show the create quiz pop-up
+    setShowCreateQuizPopup(true);
     try {
-      // Make a GET request to fetch the quiz data
-      const response = await axios.get(
-        `http://localhost:3000/api/getquiz/${quizId}`
-      );
-
+      // Make a PATCH request to update the quiz
+      const response = await axios.patch(`http://localhost:3000/api/editQuiz/${quizId}`, updatedData);
+      
       // Handle the response from the server
-      if (response.data.quiz) {
-        // Quiz data successfully retrieved
-        const quizData = response.data.quiz;
-        setSelectedQuizData(quizData);
-        setShowCreateQuizPopup(true);
-        console.log("Quiz data retrieved:", quizData);
+      if (response.data.success) {
+        // Quiz successfully updated
+        console.log('Quiz updated successfully:', response.data.updatedQuiz);
       } else {
-        // Handle error response from the server if quiz data not found
-        console.error("Quiz not found with ID:", quizId);
+        // Handle error response from the server
+        console.error('Error updating quiz:', response.data.error);
       }
     } catch (error) {
       // Handle network or server errors
-      console.error("Error updating quiz:", error);
+      console.error('Error updating quiz:', error);
     }
   };
-
-  // const handleShowDeletePopUp = () => {
-  //   setShowDeleteQuizPopup(true);
-  // };
+  
 
   const handleDeleteQuiz = async (quizId) => {
     try {
-      const response = await axios.delete(
-        `http://localhost:3000/api/deleteQuiz/${quizId}`
-      );
+      const response = await axios.delete(`http://localhost:3000/api/deleteQuiz/${quizId}`);
 
       if (response.status === 200) {
         console.log(response.data.message); // Quiz deleted successfully
-        setDeleted(true);
-        setShowDeleteQuizPopup(false);
+        setDeleted(true); // Set state to indicate quiz is deleted
       } else {
         console.error(response.data.error); // Quiz not found or Internal Server Error
         // Optionally, handle the error appropriately
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error('Error:', error);
       // Optionally, handle any network or unexpected errors
     }
   };
 
   const handleShareQuiz = (quizId) => {
-    // Logic to handle sharing quiz with the given quizId and link
-    const quizLink = `http://localhost:3001/livequiz/${quizId}`;
-    console.log(`Sharing quiz with ID: ${quizId} and link: ${quizLink}`);
-
-    // Copy the quiz link to the clipboard
-    navigator.clipboard
-      .writeText(quizLink)
-      .then(() => {
-        console.log("Quiz link copied to clipboard:", quizLink);
-        // Optionally, you can show a success message or perform any other action
-        toast.success("Quiz link copied to clipboard!");
-      })
-      .catch((error) => {
-        console.error("Failed to copy quiz link:", error);
-        // Optionally, you can show an error message or perform any other action
-        toast.error("Failed to copy quiz link!");
-      });
-  };
-  // Pass handleShareQuiz function to CreateQuiz component
-  // <CreateQuiz shareQuizLink={handleShareQuiz} />;
-
-  const handleClosePopup = () => {
-    // Set the state to hide the create quiz pop-up
-    setShowCreateQuizPopup(false);
+    // Logic to handle sharing quiz with the given quizId
+    
+    console.log(`Sharing quiz with ID: ${quizId}`);
   };
 
   return (
@@ -167,31 +135,9 @@ const QuizAnalysis = () => {
                   </button>
 
                   {/* Delete button */}
-
-                  <button
-                    // onClick={() => handleDeleteQuiz(quiz._id)}
-                    onClick={() => {
-                      setShowDeleteQuizPopup(true);
-                      setQuizToDelete(quiz);
-                    }}
-                  >
+                  <button onClick={() => handleDeleteQuiz(quiz._id)}>
                     <img src={delete_logo} alt="delete_logo" />
                   </button>
-                  {showDeleteQuizPopup && quiz === quizToDelete && (
-                    <div className={style.delete_popup}>
-                      <h3>Are you sure you want to delete this quiz?</h3>
-                      <button onClick={() => handleDeleteQuiz(quiz._id)}
-                      className={style.confirm_btn}
-                      >
-                        Confirm Delete
-                      </button>
-                      <button onClick={() => setShowDeleteQuizPopup(false)}
-                      className={style.cancel_btn}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  )}
 
                   {/* Share button (you can use a link or a custom share function) */}
                   <button onClick={() => handleShareQuiz(quiz._id)}>
@@ -211,38 +157,44 @@ const QuizAnalysis = () => {
         </table>
       </div>
 
+
+
+
       {showCreateQuizPopup && (
         <div
           style={{
-            position: "fixed",
+            position: 'fixed',
             top: 0,
             left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
             zIndex: 999,
           }}
         >
           <div
             style={{
-              background: "white",
-              padding: "20px",
-              borderRadius: "10px",
-              boxShadow: "0 0 10px rgba(0, 0, 0, 0.3)",
+              background: 'white',
+              padding: '20px',
+              borderRadius: '10px',
+              boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
             }}
           >
             {/* Render the Createquiz component in the pop-up */}
-            <EditQuiz quizData={selectedQuizData} />
+            <CreateQuiz />
 
-            <button onClick={handleClosePopup}>Close</button>
+            {/* <button onClick={handleClosePopup}>Close</button> */}
           </div>
         </div>
       )}
+
     </div>
   );
 };
 
 export default QuizAnalysis;
+
+
