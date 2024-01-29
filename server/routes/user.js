@@ -1,73 +1,102 @@
-// const express = require('express');
-// const router = express.Router();
-// const jwt = require('jsonwebtoken');
-// const User = require('../models/user');
+const express = require("express");
+const router = express.Router();
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const User = require("../models/user");
+require("dotenv").config();
 
-// // API endpoint to register a new user
-// router.post('/signup', async (req, res) => {
-//   // Implementation
-//   try {
-//     const { name, email, password } = req.body;
 
-//     // Check if the email is already registered
-//     const existingUser = await User.findOne({ email });
-//     if (existingUser) {
-//       return res.status(400).json({ success: false, error: 'Email already exists' });
-//     }
 
-//     // Save user data to the database
-//     const newUser = await User.create({ name, email, password });
+// Error handler middleware
+const errorHandler = (res, error) => {
+  console.error(error);
+  if (!res.headersSent) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 
-//     // Generate JWT token
-//     const token = jwt.sign({ userId: newUser._id, email: newUser.email }, secretKey, { expiresIn: '1h' });
+// Register Route
+router.post("/signup", async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
 
-//     res.status(201).json({ success: true, userId: newUser._id, token });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ success: false, error: 'Internal Server Error' });
-//   }
-// });
+    // Check if all required fields are provided
+    if (!name || !email || !password) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
 
-// // API endpoint to authenticate a user and get a new JWT token
-// router.post('/login', async (req, res) => {
-//   // Implementation
-//   try {
-//     const { email, password } = req.body;
+    // Validate name
+    if (name.trim().length === 0) {
+      return res.status(400).json({ error: "Name cannot be empty" });
+    }
 
-//     // Verify user credentials
-//     const user = await User.findOne({ email, password });
-//     if (!user) {
-//       return res.status(401).json({ success: false, error: 'Invalid credentials' });
-//     }
+    // Validate password (at least 6 characters)
+    if (password.length < 6) {
+      return res.status(400).json({ error: "Password must be at least 6 characters long" });
+    }
 
-//     // Generate JWT token
-//     const token = jwt.sign({ userId: user._id, email: user.email }, secretKey, { expiresIn: '1d' });
+    // Check if email is already registered
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(409).json({ error: "Email is already registered" });
+    }
 
-//     res.status(200).json({ success: true, userId: user._id, token });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ success: false, error: 'Internal Server Error' });
-//   }
-// });
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-// // Protected API endpoint that requires authentication
-// router.get('/protected', authenticateToken, (req, res) => {
-//   // Implementation
-//   res.json({ success: true, data: 'This is a protected route' });
-// });
+    // Create a new user
+    const user = new User({ name, email, password: hashedPassword });
+    await user.save();
 
-// // Middleware to verify JWT token
-// function authenticateToken(req, res, next) {
-//   // Implementation
-//   const token = req.header('Authorization');
-//   if (!token) return res.status(401).json({ success: false, error: 'Access Denied' });
+    // Generate JWT Token
+    const token = jwt.sign({ userId: user._id, user: user.email }, process.env.JWT_SECRET_KEY);
+    console.log(user._id, "user-id");
 
-//   jwt.verify(token, secretKey, (err, user) => {
-//     if (err) return res.status(403).json({ success: false, error: 'Invalid Token' });
+    // Return Success Response with token and user details
+    res.json({
+      success: true,
+      token,
+      userId: user._id,
+      user: { email: user.email, name: user.name}
+    });
+  } catch (error) {
+    // Handle errors using a centralized error handler
+    errorHandler(res, error);
+  }
+});
 
-//     req.user = user;
-//     next();
-//   });
-// }
+// Login Route
+router.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-// module.exports = router;
+    // Check if email and password are provided
+    if (!email || !password) {
+      return res.status(400).json({ error: "Email and Password are required" });
+    }
+
+    // Find user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ error: "User is not registered" });
+    }
+
+    // Compare password with stored hash
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      return res.status(401).json({ error: "Invalid Password" });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY);
+
+    // Return Success Response
+    res.json({ success: true, token,  userId: user._id, name: user.name, user: email });
+  } catch (error) {
+    errorHandler(res, error);
+  }
+});
+
+module.exports = router;
+  
+

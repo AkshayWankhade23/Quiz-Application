@@ -1,17 +1,31 @@
-import React, { useState, useEffect } from 'react';
-
-import Dashboard from '../../components/Dashboard/Dashboard';
-import CreateQuiz from '../../components/CreateQuiz/CreateQuiz';
-import QuizAnalysis from "../../components/QuizAnalysis/QuizAnalysis"
-
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Dashboard from "../../components/Dashboard/Dashboard";
+import CreateQuiz from "../../components/CreateQuiz/CreateQuiz";
+import QuizAnalysis from "../../components/QuizAnalysis/QuizAnalysis";
+import style from "./Style.module.css";
 
 const DashboardPage = () => {
-  const savedActiveTab = localStorage.getItem('activeTab');
-  const [activeTab, setActiveTab] = useState(savedActiveTab ? parseInt(savedActiveTab) : 1);
+  const navigate = useNavigate();
+  const savedActiveTab = localStorage.getItem("activeTab");
   const [showCreateQuizPopup, setShowCreateQuizPopup] = useState(false);
+  const [activeTab, setActiveTab] = useState(
+    savedActiveTab ? parseInt(savedActiveTab) : 1
+  );
+
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("user"));
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("name");
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    setIsLoggedIn(false);
+    navigate("/");
+  };
 
   useEffect(() => {
-    localStorage.setItem('activeTab', activeTab.toString());
+    localStorage.setItem("activeTab", activeTab.toString());
   }, [activeTab]);
 
   const handleCreateQuizClick = () => {
@@ -19,156 +33,64 @@ const DashboardPage = () => {
     setShowCreateQuizPopup(true);
   };
 
+
   const handleClosePopup = () => {
     // Set the state to hide the create quiz pop-up
     setShowCreateQuizPopup(false);
   };
 
+
   return (
-    <div style={{ display: 'flex' }}>
-      <div style={{
-        margin: '0',
-        padding: '0',
-        height: '98vh',
-        width: '15vw',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        background: 'rgba(255, 255, 255, 1)',
-        boxShadow: activeTab === 1 ? '0px 4px 4px 0px rgba(0, 0, 0, 0.25)' : 'none',
-        flexShrink: 0,
-      }}>
-        <div style={{
-          color: 'rgba(71, 68, 68, 1)',
-          fontFamily: 'Jomhuria',
-          fontSize: '50px',
-          fontStyle: 'normal',
-          fontWeight: 400,
-          lineHeight: 1.2,
-        }}>
-          QUIZZIE
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <button
-            onClick={() => setActiveTab(1)}
-            style={{
-              width: '11rem',
-              height: '2.375rem',
-              marginBottom: '18%',
-              flexShrink: 0,
-              backgroundColor: 'rgba(255, 255, 255, 1)',
-              border: 'none',
-              borderRadius: '10px',
-              boxShadow: activeTab === 1 ? '0px 0px 14px 0px rgba(0, 0, 0, 0.12)' : 'none',
-              color: 'rgba(71, 68, 68, 1)',
-              fontFamily: 'Poppins',
-              fontSize: '1.25rem',
-              fontStyle: 'normal',
-              fontWeight: 600,
-              lineHeight: 'normal',
-            }}
-          >
-            Dashboard
-          </button>
-
-          <button
-            onClick={() => setActiveTab(2)}
-            style={{
-              width: '11rem',
-              height: '2.375rem',
-              marginBottom: '18%',
-              flexShrink: 0,
-              backgroundColor: 'rgba(255, 255, 255, 1)',
-              border: 'none',
-              borderRadius: '10px',
-              boxShadow: activeTab === 2 ? '0px 0px 14px 0px rgba(0, 0, 0, 0.12)' : 'none',
-              color: 'rgba(71, 68, 68, 1)',
-              fontFamily: 'Poppins',
-              fontSize: '1.25rem',
-              fontStyle: 'normal',
-              fontWeight: 600,
-              lineHeight: 'normal',
-            }}
-          >
-            Analytics
-          </button>
-
-          <button
-            onClick={handleCreateQuizClick}
-            style={{
-              width: '11rem',
-              height: '2.375rem',
-              marginBottom: '18%',
-              flexShrink: 0,
-              backgroundColor: 'rgba(255, 255, 255, 1)',
-              border: 'none',
-              borderRadius: '10px',
-              boxShadow: activeTab === 3 ? '0px 0px 14px 0px rgba(0, 0, 0, 0.12)' : 'none',
-              color: 'rgba(71, 68, 68, 1)',
-              fontFamily: 'Poppins',
-              fontSize: '1.25rem',
-              fontStyle: 'normal',
-              fontWeight: 600,
-              lineHeight: 'normal',
-            }}
-          >
-            Create Quiz
-          </button>
-        </div>
-
-        <div>
-          <svg xmlns="http://www.w3.org/2000/svg" width="124" height="2" viewBox="0 0 124 2" fill="none">
-            <path d="M0 1H124" stroke="black" />
-          </svg>
-          <div style={{
-            color: 'rgba(71, 68, 68, 1)',
-            fontFamily: 'Poppins',
-            fontSize: '20px',
-            fontStyle: 'normal',
-            fontWeight: 700,
-            lineHeight: 'normal',
-            textTransform: 'uppercase',
-          }}>
-            Logout
-          </div>
-        </div>
+    <div className={style.main}>
+      <div className={style.dashboard_sidebar}>
+        <h3>QUIZZIE</h3>
+        <button
+          onClick={() => setActiveTab(1)}
+          className={`${style.button} ${
+            activeTab === 1 && style.active
+          }`}
+        >
+          Dashboard
+        </button>{" "}
+        <br />
+        <button
+          onClick={() => setActiveTab(2)}
+          className={`${style.button} ${
+            activeTab === 2 && style.active
+          }`}
+        >
+          Analytics
+        </button>{" "}
+        <br />
+        <button
+          onClick={handleCreateQuizClick}
+          className={`${style.button} ${
+            activeTab === 3 && style.active
+          }`}
+        >
+          Create Quiz
+        </button>{" "}
+        <br />
+        <div className={style.line}></div>
+        <button onClick={handleLogout} className={style.logout_btn}>Logout</button>
       </div>
 
-      <div>
+      <div className={style.dashboard_content}>
         {activeTab === 1 && <Dashboard />}
         {activeTab === 2 && <QuizAnalysis />}
         {activeTab === 3 && <CreateQuiz />}
       </div>
-
       {showCreateQuizPopup && (
         <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            zIndex: 999,
-          }}
+          className={style.createquiz_popup}
         >
           <div
-            style={{
-              background: 'white',
-              padding: '20px',
-              borderRadius: '10px',
-              boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
-            }}
+            className={style.create_quiz}
           >
             {/* Render the Createquiz component in the pop-up */}
-            <CreateQuiz />
+            <CreateQuiz handleClosePopup={handleClosePopup} />
 
-            <button onClick={handleClosePopup}>Close</button>
+            {/* <button onClick={handleClosePopup} className={style.cancle_btn} >Canc</button> */}
           </div>
         </div>
       )}
@@ -177,3 +99,4 @@ const DashboardPage = () => {
 };
 
 export default DashboardPage;
+

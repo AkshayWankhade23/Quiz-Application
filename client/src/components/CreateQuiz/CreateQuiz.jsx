@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import style from "./Style.module.css";
-import cross from "../../assets/charm_cross.png";
+import cross_logo from "../../assets/charm_cross.png";
 import delete_logo from "../../assets/delete.png";
 import plus_logo from "../../assets/plus.png";
 import { toast } from "react-hot-toast";
 
-const CreateQuiz = () => {
+const CreateQuiz = ({ handleClosePopup }) => {
   const navigate = useNavigate();
+  // const [showCreateQuizPopup, setShowCreateQuizPopup] = useState(true);
   const [quizData, setQuizData] = useState({
     userId: localStorage.getItem("userId"),
     quizName: "",
@@ -201,22 +202,21 @@ const CreateQuiz = () => {
       currentQuestion.optionType.trim() === "" ||
       (quizData.quizType === "qa" && currentQuestion.timer.trim() === "")
     ) {
-      toast.error("Please fill in all required fields for the current question.");
+      toast.error(
+        "Please fill in all required fields for the current question."
+      );
       return;
     }
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/saveQuiz",
+        "http://localhost:3000/api/quiz/saveQuiz",
         quizData
       );
 
       if (response.data.success) {
         setQuizData({ ...quizData, quizId: response.data.quizId });
         setQuizPublished(true);
-        console.log(response.data.quizId);
-        // Invoke the callback function with quizId and generated link
-        // handleShareQuiz(response.data.quizId, `http://localhost:3001/livequiz/${response.data.quizId}`);
       } else {
         alert(`Error: ${response.data.error}`);
       }
@@ -232,13 +232,8 @@ const CreateQuiz = () => {
     document.execCommand("copy");
   };
 
-
-  const handleRemove = () => {
-    navigate('/dashboard-page')
-  };
-
   return (
-    <div>
+    <>
       {showQuizDetails && (
         <div className={style.container}>
           <input
@@ -285,6 +280,10 @@ const CreateQuiz = () => {
 
           <br />
 
+          <button onClick={handleClosePopup} className={style.cancle_btn}>
+            Cancel
+          </button>
+
           <button onClick={handleContinue} className={style.continue_btn}>
             Continue
           </button>
@@ -297,13 +296,8 @@ const CreateQuiz = () => {
             {/* <button onClick={handleAddQuestion}>+ Add Question</button> */}
 
             <div
-              style={{
-                border: "1px solid #ccc",
-                padding: "10px",
-                margin: "10px 0",
-              }}
             >
-              <div className={style.ellipse}>
+              <div className={style.ellipse_container}>
                 {quizData.questions.map((question, index) => (
                   <div key={index}>
                     <button
@@ -315,32 +309,25 @@ const CreateQuiz = () => {
                     {index > 0 && index <= quizData.numQuestions - 1 && (
                       <button
                         onClick={() => handleRemoveQuestion(index)}
-                        className={style.cross}
+                        className={style.cross_btn}
                       >
-                        <img src={cross} alt="cross_logo" />
-                        {/* X */}
+                        <img src={cross_logo} alt="cross_logo" />
                       </button>
                     )}
                   </div>
                 ))}
                 {quizData.questions.length < 5 && (
-                  <button onClick={handleAddQuestion}>
+                  <button className={style.plus} onClick={handleAddQuestion}>
                     <img
                       src={plus_logo}
                       alt="plus_logo"
-                      className={style.plus}
                     />
                   </button>
                 )}
               </div>
             </div>
 
-            <div
-              style={{
-                border: "1px solid #ccc",
-                padding: "10px",
-                margin: "10px 0",
-              }}
+            <div className={style.question_container}
             >
               <input
                 type="text"
@@ -537,11 +524,11 @@ const CreateQuiz = () => {
                       <button
                         className={`${style.timerButton} ${
                           quizData.questions[currentQuestionIndex].timer ===
-                          "Off"
+                          "OFF"
                             ? style.selectedButton
                             : ""
                         }`}
-                        value="Off"
+                        value="OFF"
                         onClick={(e) =>
                           handleTimerChange(currentQuestionIndex, e)
                         }
@@ -550,53 +537,57 @@ const CreateQuiz = () => {
                           "Off"
                         }
                       >
-                        Off
+                        OFF
                       </button>
                       <br />
 
                       <button
                         className={`${style.timerButton} ${
                           quizData.questions[currentQuestionIndex].timer ===
-                          "5s"
+                          "5sec"
                             ? style.selectedButton
                             : ""
                         }`}
-                        value="5s"
+                        value="5sec"
                         onClick={(e) =>
                           handleTimerChange(currentQuestionIndex, e)
                         }
                         checked={
                           quizData.questions[currentQuestionIndex].timer ===
-                          "5s"
+                          "5sec"
                         }
                       >
-                        5s
+                        5sec
                       </button>
                       <br />
 
                       <button
                         className={`${style.timerButton} ${
                           quizData.questions[currentQuestionIndex].timer ===
-                          "10s"
+                          "10sec"
                             ? style.selectedButton
                             : ""
                         }`}
-                        value="10s"
+                        value="10sec"
                         onClick={(e) =>
                           handleTimerChange(currentQuestionIndex, e)
                         }
                         checked={
                           quizData.questions[currentQuestionIndex].timer ===
-                          "10s"
+                          "10sec"
                         }
                       >
-                        10s
+                        10sec
                       </button>
                     </div>
                   </div>
                 )}
               </div>
             </div>
+
+            <button onClick={handleClosePopup} className={style.cancle_btn}>
+              Cancel
+            </button>
 
             <button onClick={handleSubmit} className={style.continue_btn}>
               Create Quiz
@@ -606,8 +597,8 @@ const CreateQuiz = () => {
 
         {quizPublished && (
           <div className={style.quiz_published}>
-            <button onClick={handleRemove} className={style.cross_btn}>
-              <img src={cross} alt="cross_logo" />
+            <button onClick={handleClosePopup} className={style.cross_btn_2}>
+              <img src={cross_logo} alt="cross_logo" />
             </button>
             <h3>Congrats your Quiz is Published!</h3>
             <p>
@@ -626,7 +617,7 @@ const CreateQuiz = () => {
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 };
 

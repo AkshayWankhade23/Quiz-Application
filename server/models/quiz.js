@@ -1,38 +1,52 @@
-// const mongoose = require('mongoose');
+// quiz.js
+const mongoose = require("mongoose");
+const User = require("./user");
 
-// const quizSchema = new mongoose.Schema({
-//   userId: {
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: 'User',
-//     required: true,
-//   },
-//   quizName: String,
-//   quizType: String,
-//   numQuestions: Number,
-//   questions: [
-//     {
-//       question: String,
-//       options: [String],
-//       correctOption: Number,
-//       optionType: String,
-//       timer: String,
-//       impressionofQuestion: {
-//         type: Number,
-//         default: 0,
-//       },
-//       answeredCorrectly: {
-//         type: Number,
-//         default: 0,
-//       },
-//     },
-//   ],
-//   impressionofQuiz: Number,
-//   date: {
-//     type: Date,
-//     default: Date.now,
-//   },
-// });
+const quizSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User", // References the User model
+    required: true,
+  },
+  quizName: { type: String, required: true },
+  quizType: { 
+    type: String, 
+    required: true,
+    enum: ['qa', 'poll']
+  },
+  numQuestions: Number,
+  questions: [
+    {
+      question: { type: String, required: true },
+      options: [
+        {
+          option: { type: String, required: true },
+          impressionofOption: Number,
+        },
+      ], 
+      correctOption: Number, 
+      optionType: { 
+        type: String, 
+        required: true,
+        enum: ['text', 'image', 'both'] 
+      },
+      timer: { type: String },
+      impressionofQuestion: {
+        type: Number,
+        default: 0,
+      },
+      answeredCorrectly: {
+        type: Number,
+        default: 0,
+      },
+    },
+  ],
+  impressionofQuiz: Number,
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+});
 
-// const Quiz = mongoose.model('Quiz', quizSchema);
+module.exports = mongoose.model("Quiz", quizSchema);
 
-// module.exports = Quiz;

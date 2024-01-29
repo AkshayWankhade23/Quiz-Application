@@ -25,7 +25,7 @@ const QuizAnalysis = () => {
 
         // Fetch quizzes with impressions
         const quizResponse = await axios.get(
-          `http://localhost:3000/api/quizzesWithImpressions/${userId}`
+          `http://localhost:3000/api/quiz/quizzesWithImpressions/${userId}`
         );
         const fetchedQuizzes = quizResponse.data.quizzes;
 
@@ -39,7 +39,7 @@ const QuizAnalysis = () => {
         setQuizzes(fetchedQuizzes);
 
         const questionResponse = await axios.get(
-          `http://localhost:3000/api/questionCount/${userId}`
+          `http://localhost:3000/api/quiz/questionCount/${userId}`
         );
         setQuestionCount(questionResponse.data.questionCount);
       } catch (error) {
@@ -48,7 +48,7 @@ const QuizAnalysis = () => {
     };
 
     fetchDashboardData();
-  }, []);
+  }, [deleted]);
 
   function formatDate(dateString) {
     const options = { day: "numeric", month: "short", year: "numeric" };
@@ -59,7 +59,7 @@ const QuizAnalysis = () => {
     try {
       // Make a GET request to fetch the quiz data
       const response = await axios.get(
-        `http://localhost:3000/api/getquiz/${quizId}`
+        `http://localhost:3000/api/quiz/getquiz/${quizId}`
       );
 
       // Handle the response from the server
@@ -86,7 +86,7 @@ const QuizAnalysis = () => {
   const handleDeleteQuiz = async (quizId) => {
     try {
       const response = await axios.delete(
-        `http://localhost:3000/api/deleteQuiz/${quizId}`
+        `http://localhost:3000/api/quiz/deleteQuiz/${quizId}`
       );
 
       if (response.status === 200) {
@@ -131,7 +131,7 @@ const QuizAnalysis = () => {
   };
 
   return (
-    <div>
+    <div className={style.main}>
       <div className={style.header}>Quiz Analysis</div>
 
       <div className={style.quizTable}>
@@ -162,14 +162,14 @@ const QuizAnalysis = () => {
                   {/* {icons} */}
 
                   {/* Edit button */}
-                  <button onClick={() => handleEditQuiz(quiz._id)}>
+                  <button className={style.btn} onClick={() => handleEditQuiz(quiz._id)}>
                     <img src={edit_logo} alt="edit_logo" />
                   </button>
 
                   {/* Delete button */}
 
                   <button
-                    // onClick={() => handleDeleteQuiz(quiz._id)}
+                    className={style.btn}
                     onClick={() => {
                       setShowDeleteQuizPopup(true);
                       setQuizToDelete(quiz);
@@ -194,7 +194,7 @@ const QuizAnalysis = () => {
                   )}
 
                   {/* Share button (you can use a link or a custom share function) */}
-                  <button onClick={() => handleShareQuiz(quiz._id)}>
+                  <button className={style.btn} onClick={() => handleShareQuiz(quiz._id)}>
                     <img src={share_logo} alt="share_logo" />
                   </button>
                 </td>
@@ -213,31 +213,15 @@ const QuizAnalysis = () => {
 
       {showCreateQuizPopup && (
         <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 999,
-          }}
+          className={style.edit_popup}
         >
           <div
-            style={{
-              background: "white",
-              padding: "20px",
-              borderRadius: "10px",
-              boxShadow: "0 0 10px rgba(0, 0, 0, 0.3)",
-            }}
+            className={style.popup_container}
           >
             {/* Render the Createquiz component in the pop-up */}
-            <EditQuiz quizData={selectedQuizData} />
+            <EditQuiz quizData={selectedQuizData} handleClosePopup={handleClosePopup} />
 
-            <button onClick={handleClosePopup}>Close</button>
+            {/* <button onClick={handleClosePopup}>Close</button> */}
           </div>
         </div>
       )}

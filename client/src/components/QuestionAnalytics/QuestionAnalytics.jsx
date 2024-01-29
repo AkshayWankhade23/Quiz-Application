@@ -16,7 +16,7 @@ const QuestionAnalytics = () => {
 
         // Fetch quizzes with impressions
         const quiz = await axios.get(
-          `http://localhost:3000/api/getquiz/${quizId}`
+          `http://localhost:3000/api/quiz/getquiz/${quizId}`
         );
         const fetchedquiz = quiz.data.quiz;
         console.log(fetchedquiz);

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import toast from "react-hot-toast";
 import style from "./Style.module.css";
-import cross from "../../assets/charm_cross.png";
-import delete_logo from "../../assets/delete.png";
-import plus_logo from "../../assets/plus.png";
+// import cross from "../../assets/charm_cross.png";
+// import delete_logo from "../../assets/delete.png";
+// import plus_logo from "../../assets/plus.png";
 
-const EditQuiz = ({ quizData }) => {
+const EditQuiz = ({ quizData, handleClosePopup }) => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState(quizData);
   const [loading, setLoading] = useState(true);
@@ -103,15 +104,16 @@ const EditQuiz = ({ quizData }) => {
   };
 
   const handleSubmit = async () => {
-    console.log(formData._id);
+    // console.log(formData._id);
     try {
       const response = await axios.patch(
-        `http://localhost:3000/api/editQuiz/${formData._id}`,
+        `http://localhost:3000/api/quiz/editQuiz/${formData._id}`,
         formData
       );
 
       if (response.data.success) {
-        console.log('Quiz updated successfully:', response.data.updatedQuiz);
+        // toast.success("Quiz Updated Successfully!");
+        handleClosePopup();
       } else {
         console.error('Error updating quiz:', response.data.error);
       }
@@ -121,18 +123,15 @@ const EditQuiz = ({ quizData }) => {
   };
 
   const handleRemove = () => {
-    navigate('/dashboard-page');
+    // navigate('/dashboard-page');
+    handleClosePopup();
   };
 
   return (
     <>
       <div className={style.question_container}>
         <div
-          style={{
-            border: "1px solid #ccc",
-            padding: "10px",
-            margin: "10px 0",
-          }}
+          
         >
           <div className={style.ellipse}>
             {formData.questions.map((question, index) => (
@@ -159,12 +158,7 @@ const EditQuiz = ({ quizData }) => {
           </div>
         </div>
 
-        <div
-          style={{
-            border: "1px solid #ccc",
-            padding: "10px",
-            margin: "10px 0",
-          }}
+        <div className={style.ques_container}
         >
           <input
             type="text"
@@ -174,7 +168,7 @@ const EditQuiz = ({ quizData }) => {
             className={style.question_input}
           />
           <br />
-          <label>
+          {/* <label>
             Option Type
             <div className={style.optionType_label}>
               <label>
@@ -222,7 +216,7 @@ const EditQuiz = ({ quizData }) => {
                 Text & Image URL
               </label>
             </div>
-          </label>
+          </label> */}
 
           {formData.questions[currentQuestionIndex].options.map(
             (option, optionIndex) => (
@@ -259,8 +253,8 @@ const EditQuiz = ({ quizData }) => {
           )}
 
           <div>
-            <button onClick={handleSubmit}>Update Quiz</button>
-            <button onClick={handleRemove}>Cancel</button>
+            <button className={style.update_btn} onClick={handleSubmit}>Update Quiz</button>
+            <button className={style.cancel_btn} onClick={handleRemove}>Cancel</button>
           </div>
         </div>
       </div>

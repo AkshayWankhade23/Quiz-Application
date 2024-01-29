@@ -1,3 +1,5 @@
+
+
 .container {
   width: 845px;
   height: 422px;
@@ -6,11 +8,11 @@
   background: #fff;
 }
 
-button{
+button {
   cursor: pointer;
 }
 
-input {
+/* input {
   border: none;
   flex-shrink: 0;
   border-radius: 10px;
@@ -23,7 +25,7 @@ input {
   font-weight: 500;
   line-height: normal;
   margin-bottom: 2rem;
-}
+} */
 
 .quizName {
   width: 673px;
@@ -38,11 +40,11 @@ input {
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  padding: 2px 10px;
-  margin: 2rem 0rem 2rem 4rem;
+  padding: 2px 20px;
+  margin: 4rem 0rem 2rem 4rem;
 }
 
-label {
+.container label {
   color: #9f9f9f;
   text-align: center;
   font-family: Poppins;
@@ -52,7 +54,7 @@ label {
   line-height: normal;
 }
 
-button {
+.button {
   flex-shrink: 0;
   border-radius: 10px;
   box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.15);
@@ -67,6 +69,7 @@ button {
 }
 
 .quiz_type {
+  margin-top: 2rem;
   margin-left: 4rem;
   display: flex;
 }
@@ -78,7 +81,15 @@ button {
   border-radius: 10px;
   background: #fff;
   box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.15);
-  margin-left: 1rem;
+  margin-left: 3rem;
+  border: none;
+  color: #9f9f9f;
+  text-align: center;
+  font-family: Poppins;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 }
 
 .selected {
@@ -98,15 +109,21 @@ button {
   flex-shrink: 0;
   float: right;
   margin-top: 1rem;
+  margin-bottom: 1rem;
   margin-right: 2rem;
-  border-radius: 10px;
-  background: #fff;
-  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.25);
-}
-.continue_btn:hover {
   border-radius: 10px;
   background: #60b84b;
   color: #fff;
+  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.25);
+  border: none;
+  font-family: Poppins;
+  font-size: 21px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.continue_btn:hover {
+  background: #5bd93c;
 }
 
 .addOption_btn {
@@ -122,6 +139,12 @@ button {
   font-style: normal;
   font-weight: 600;
   line-height: normal;
+  border: none;
+}
+
+.cross_btn{
+  background: none;
+  border: none;
 }
 
 .share_btn {
@@ -131,15 +154,15 @@ button {
   margin-top: 1rem;
   margin-right: 2rem;
   border-radius: 10px;
-  background: #fff;
+  background: #60b84b;
+  color: #fff;
   box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.25);
   align-items: center;
   margin: 2rem 0rem 0rem 12rem;
+  border: none;
 }
-.share_btn:hover{
-  border-radius: 10px;
-  background: #60b84b;
-  color: #fff;
+.share_btn:hover {
+  background: #5bd93c;
 }
 
 .link_input {
@@ -151,7 +174,7 @@ button {
   margin: 1rem 0rem 0rem 5rem;
 }
 
-.ellipse {
+.ellipse_container {
   display: flex;
 }
 
@@ -163,11 +186,16 @@ button {
   filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.15));
   border-radius: 50%;
   margin-left: 1rem;
+  border: none;
+  color: #9F9F9F;
+text-align: center;
+font-family: Poppins;
+font-size: 1.25rem;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
 }
 
-.cross {
-  width: 0px;
-}
 
 .question_container {
   width: 845px;
@@ -197,6 +225,14 @@ button {
   background: #fff;
   box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.15);
   margin-top: 1rem;
+  border: none;
+  color: #9f9f9f;
+  text-align: center;
+  font-family: Poppins;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 }
 
 .create_btn {
@@ -209,17 +245,18 @@ button {
   flex-shrink: 0;
   border-radius: 10px;
   background: #fff;
+  text-align: center;
 }
 
-h3 {
+.quiz_published h3 {
   color: #474444;
   text-align: center;
   font-family: Poppins;
-  font-size: 39px;
+  font-size: 2.4375rem;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
-  width: 502px;
+  text-align: center;
 }
 
 .selectedButton {
@@ -237,23 +274,26 @@ h3 {
   margin-top: -2.2rem;
 }
 
-.cross {
+.cross_btn_2 {
   width: 15px;
   height: 15px;
   flex-shrink: 0;
-  margin: 0rem 1rem 2rem -1rem;
   position: relative;
   background: none;
+  border: none;
+  float: right;
+  margin-top: 0rem;
 }
 
 .plus {
   width: 42px;
   height: auto;
   flex-shrink: 0;
-  /* background: #fff; */
+  background: #fff;
   fill: none;
   box-shadow: none;
   margin: 1rem 0rem 0rem 1rem;
+  border: none;
 }
 
 .text_image {
@@ -275,4 +315,29 @@ h3 {
 
 .delete_btn {
   position: fixed;
+  background: #fff;
+  border: none;
+  margin-left: 1rem;
+}
+
+.cancle_btn {
+  width: 279px;
+  height: 46.144px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.25);
+  margin-bottom: 1rem;
+  border: none;
+  color: #474444;
+  font-family: Poppins;
+  font-size: 21px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin-top: 1rem;
+}
+
+.question_container{
+  margin-top: 1rem;
 }

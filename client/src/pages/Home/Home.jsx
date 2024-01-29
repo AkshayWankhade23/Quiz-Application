@@ -20,7 +20,7 @@ const Home = () => {
         <button className={style.signUp} onClick={() => handleButtonClick("signup")}>Sign Up</button>
         <button className={style.signUp} onClick={() => handleButtonClick("login")}>Login</button>
       </div>
-      <div>
+      <div className={style.signup_page}>
         {displayComponent === "signup" && <Signup />}
         {displayComponent === "login" && <Login />}
       </div>
