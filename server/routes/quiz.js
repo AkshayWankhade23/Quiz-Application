@@ -1,10 +1,11 @@
+
 const mongoose = require("mongoose");
 const express = require("express");
 const router = express.Router();
 const Quiz = require("../models/quiz");
 const requireAuth = require("../middlewares/requireAuth");
 
-router.post("/saveQuiz", async (req, res) => {
+router.post("/createQuiz", requireAuth, async (req, res) => {
   try {
     const quizData = req.body;
 
@@ -90,12 +91,60 @@ router.get("/getquiz/:quizId", async (req, res) => {
 
     // Fetch quizzes with impressions
     const quiz = await Quiz.findOne({ _id });
+    // quiz.impressionofQuiz += 1;
+    const result = await Quiz.findByIdAndUpdate(_id, quiz);
     res.json({ quiz });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+router.get("/get-live-quiz/:quizId", async (req, res) => {
+  try {
+    const _id = req.params.quizId;
+
+    // Ensure that _id is properly set to a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+      return res.status(400).json({ success: false, error: "Invalid quizId" });
+    }
+
+    // Fetch quiz by ID
+    const quiz = await Quiz.findOne({ _id });
+
+    // If quiz is not found, return an error
+    if (!quiz) {
+      return res.status(404).json({ success: false, error: "Quiz not found" });
+    }
+
+    // Increment impressionofQuiz and save the updated quiz
+    quiz.impressionofQuiz = (quiz.impressionofQuiz || 0) + 1;
+    await quiz.save();
+
+    res.json({ quiz });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+// router.get("/get-live-quiz/:quizId", async (req, res) => {
+//   try {
+//     const _id = req.params.quizId;
+
+//     // Ensure that _id is properly set to a valid ObjectId
+//     if (!mongoose.Types.ObjectId.isValid(_id)) {
+//       return res.status(400).json({ success: false, error: "Invalid quizId" });
+//     }
+
+//     // Fetch quizzes with impressions
+//     const quiz = await Quiz.findOne({ _id });
+//     quiz.impressionofQuiz += 1;
+//     const result = await Quiz.findByIdAndUpdate(_id, quiz);
+//     res.json({ quiz });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
 
 router.post("/updateQuiz", async (req, res) => {
   try {
@@ -127,7 +176,7 @@ router.post("/updateQuiz", async (req, res) => {
 });
 
 // API endpoint to delete a quiz by its ID
-router.delete("/deleteQuiz/:quizId", async (req, res) => {
+router.delete("/deleteQuiz/:quizId", requireAuth, async (req, res) => {
   try {
     const quizId = req.params.quizId;
 
@@ -152,7 +201,7 @@ router.delete("/deleteQuiz/:quizId", async (req, res) => {
 });
 
 // PATCH endpoint for updating a quiz
-router.patch("/editQuiz/:quizId", async (req, res) => {
+router.patch("/editQuiz/:quizId", requireAuth, async (req, res) => {
   try {
     const quizId = req.params.quizId;
     const { questions } = req.body;
@@ -183,4 +232,3 @@ router.patch("/editQuiz/:quizId", async (req, res) => {
 });
 
 module.exports = router;
-

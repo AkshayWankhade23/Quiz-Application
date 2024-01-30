@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -7,7 +8,7 @@ import style from "./Style.module.css";
 function LiveQuiz() {
   const { quizId } = useParams();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [timer, setTimer] = useState(null);  
+  const [timer, setTimer] = useState(null);
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [quizData, setQuizData] = useState(null);
@@ -15,17 +16,15 @@ function LiveQuiz() {
   useEffect(() => {
     const fetchQuizData = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3000/api/quiz/getquiz/${quizId}`
+        const response = await axios.get(
+          `http://localhost:3000/api/quiz/get-live-quiz/${quizId}`
         );
-        const data = await response.json();
+        const data = response.data;
         console.log(data.quiz);
         if (data) {
           setQuizData({
             ...data.quiz,
-            impressionofQuiz: data.quiz.impressionofQuiz + 1,
           });
-          // Set the timer from the fetched data
           console.log(data.quiz.questions[0].timer, "Timer");
           const initialTimer = data.quiz.questions[0].timer;
           setTimer(initialTimer === "OFF" ? null : parseInt(initialTimer));
@@ -36,24 +35,44 @@ function LiveQuiz() {
         console.error(error);
       }
     };
-
+  
     fetchQuizData();
   }, [quizId]);
+
+  useEffect(() => {
+    if (quizCompleted) {
+      const sendQuizDataToBackend = async () => {
+        try {
+          const response = await axios.post(
+            "http://localhost:3000/api/quiz/updateQuiz",
+            {
+              quizData,
+            }
+          );
+
+          console.log(response.data); 
+        } catch (error) {
+          console.error("Error sending quiz data to backend:", error);
+        }
+      };
+
+      sendQuizDataToBackend();
+    }
+  }, [quizCompleted, quizData]);
 
   useEffect(() => {
     if (timer !== null && timer !== "OFF" && timer > 0) {
       const interval = setInterval(() => {
         setTimer((prevTimer) => prevTimer - 1);
       }, 1000);
-  
-      // Clear interval when timer reaches 0
+
       return () => clearInterval(interval);
     }
   }, [timer]);
 
   useEffect(() => {
     if (quizData && timer === null) {
-      // Set the timer from the fetched data if it's not set yet
+
       const initialTimer = quizData.questions[0].timer;
       setTimer(initialTimer === "OFF" ? null : parseInt(initialTimer));
     }
@@ -69,21 +88,31 @@ function LiveQuiz() {
     setSelectedOptions((prevSelectedOptions) => {
       const updatedOptions = [...prevSelectedOptions];
       updatedOptions[currentQuestionIndex] = optionIndex;
+
+      const updatedQuizData = { ...quizData };
+      const currentQuestion = updatedQuizData.questions[currentQuestionIndex];
+      const selectedOption = currentQuestion.options[optionIndex];
+      if (!selectedOption.selected) {
+        selectedOption.impressionofOption += 1;
+        selectedOption.selected = true; // Mark the option as selected
+      }
+      setQuizData(updatedQuizData);
+  
       return updatedOptions;
     });
   };
-
+  
   const handleNextClick = () => {
     if (quizData && currentQuestionIndex < quizData.numQuestions - 1) {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
-      // Update timer for the next question
+
       setTimer(parseInt(quizData.questions[currentQuestionIndex + 1].timer));
     } else {
-      // If there are no more questions, mark quiz as completed
+
       setQuizCompleted(true);
     }
   };
-  
+
 
   const calculateScore = () => {
     let score = 0;
@@ -111,7 +140,6 @@ function LiveQuiz() {
 
     updatedQuizData.questions = updatedQuestions;
 
-    // Check if there are actual changes before updating the state
     if (!JSON.stringify(quizData) === JSON.stringify(updatedQuizData)) {
       setQuizData(updatedQuizData);
     }
@@ -121,25 +149,48 @@ function LiveQuiz() {
 
   const renderOptions = (options, optionType) => {
     return options.map((currentOption, optionIndex) => (
-      <div
-        className={`${style.options_card} ${
-          selectedOptions[currentQuestionIndex] === optionIndex
-            ? style.selected
-            : ""
-        }`}
-        key={optionIndex}
-        onClick={() => handleOptionSelect(optionIndex)}
-      >
-        {optionType === "text" && <div>{currentOption.option}</div>}
-        {optionType === "image" && <div>{currentOption.option}</div>}
+      <div key={optionIndex} onClick={() => handleOptionSelect(optionIndex)}>
+        {optionType === "text" && (
+          <div
+            className={`${style.text_option} ${
+              selectedOptions[currentQuestionIndex] === optionIndex
+                ? style.selected
+                : ""
+            }`}
+          >
+            {currentOption.option}
+          </div>
+        )}
+
+        {optionType === "image" && (
+          <img
+            className={`${style.text_option} ${
+              selectedOptions[currentQuestionIndex] === optionIndex
+                ? style.selected
+                : ""
+            }`}
+            src={currentOption.option}
+            alt="image_option"
+          />
+        )}
         {optionType === "both" && (
-          <>
-            <div>{currentOption.option.split("***")[0]}</div>
-            <img
-              src={currentOption.option.split("***")[1]}
-              alt="option_image"
-            />
-          </>
+          <div
+            className={`${style.both_option} ${
+              selectedOptions[currentQuestionIndex] === optionIndex
+                ? style.selected
+                : ""
+            }`}
+          >
+            <div className={style.both_option_text}>
+              {currentOption.option.split("***")[0]}
+            </div>
+            <div>
+              <img
+                src={currentOption.option.split("***")[1]}
+                alt="option_image"
+              />
+            </div>
+          </div>
         )}
       </div>
     ));
@@ -188,8 +239,9 @@ function LiveQuiz() {
           <div className={style.question_index}>{`0${
             currentQuestionIndex + 1
           }/${quizData.numQuestions}`}</div>
-          {timer !== null && quizData.quizType === "qa" && (  
-            <div className={style.timer}>{timer}s</div>
+          {timer !== null && quizData.quizType === "qa" && (
+
+            <div className={style.timer}>{timer ? timer + "s" : " "}</div>
           )}
 
           <div className={style.question_text}>{currentQuestion.question}</div>

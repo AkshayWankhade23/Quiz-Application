@@ -3,43 +3,15 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import style from "./Style.module.css";
-// import cross from "../../assets/charm_cross.png";
-// import delete_logo from "../../assets/delete.png";
-// import plus_logo from "../../assets/plus.png";
 
 const EditQuiz = ({ quizData, handleClosePopup }) => {
-    const navigate = useNavigate();
-    const [formData, setFormData] = useState(quizData);
-  const [loading, setLoading] = useState(true);
+  const [formData, setFormData] = useState(quizData);
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [showQuizDetails, setShowQuizDetails] = useState(true);
-  const [quizPublished, setQuizPublished] = useState(false);
 
   useEffect(() => {
     setFormData(quizData);
   }, [quizData]);
-
-
-  const handleQuizNameChange = (e) => {
-    setFormData({ ...formData, quizName: e.target.value });
-  };
-
-  const handleQuizTypeChange = (selectedType) => {
-    setFormData({ ...formData, quizType: selectedType });
-  };
-
-  const handleOptionTypeChange = (questionIndex, e) => {
-    const updatedQuestions = [...formData.questions];
-    updatedQuestions[questionIndex].optionType = e.target.value;
-    setFormData({ ...formData, questions: updatedQuestions });
-  };
-
-  const handleTimerChange = (questionIndex, e) => {
-    const updatedQuestions = [...formData.questions];
-    updatedQuestions[questionIndex].timer = e.target.value;
-    setFormData({ ...formData, questions: updatedQuestions });
-  };
 
   const handleQuestionChange = (index, e) => {
     const updatedQuestions = [...formData.questions];
@@ -57,82 +29,43 @@ const EditQuiz = ({ quizData, handleClosePopup }) => {
     setFormData({ ...formData, questions: updatedQuestions });
   };
 
-  const handleCorrectAnswerChange = (questionIndex, optionIndex) => {
-    const updatedQuestions = [...formData.questions];
-    updatedQuestions[questionIndex].correctOption = optionIndex;
-    setFormData({ ...formData, questions: updatedQuestions });
-  };
-
-  const handleAddQuestion = () => {
-    setFormData({
-      ...formData,
-      numQuestions: formData.numQuestions + 1,
-      questions: [
-        ...formData.questions,
-        {
-          question: "",
-          options: [{ option: "", impressionofOption: 0 }, { option: "", impressionofOption: 0 }],
-          correctOption: null,
-          optionType: "",
-          timer: "",
-        },
-      ],
-    });
-  };
-
-  const handleRemoveQuestion = (index) => {
-    if (index > 0 && index <= formData.numQuestions - 1) {
-      const updatedQuestions = [...formData.questions];
-      updatedQuestions.splice(index, 1);
-      setFormData({
-        ...formData,
-        numQuestions: formData.numQuestions - 1,
-        questions: updatedQuestions,
-      });
-      setCurrentQuestionIndex(
-        Math.min(currentQuestionIndex, formData.numQuestions - 2)
-      );
-    }
-  };
-
-  const handleRemoveOption = (questionIndex, optionIndex) => {
-    if (quizData.questions[questionIndex].options.length > 2) {
-      const updatedQuestions = [...quizData.questions];
-      updatedQuestions[questionIndex].options.splice(optionIndex, 1);
-      setFormData({ ...quizData, questions: updatedQuestions });
-    }
-  };
-
   const handleSubmit = async () => {
-    // console.log(formData._id);
+    const token = window.localStorage.getItem("token");
+    if (!token) {
+      toast.error("Login to create a job");
+      return;
+    }
     try {
       const response = await axios.patch(
         `http://localhost:3000/api/quiz/editQuiz/${formData._id}`,
-        formData
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        }
       );
 
       if (response.data.success) {
-        // toast.success("Quiz Updated Successfully!");
+        toast.success("Quiz Updated Successfully!");
         handleClosePopup();
       } else {
-        console.error('Error updating quiz:', response.data.error);
+        console.error("Error updating quiz:", response.data.error);
       }
     } catch (error) {
-      console.error('Error updating quiz:', error);
+      console.error("Error updating quiz:", error);
     }
   };
 
   const handleRemove = () => {
-    // navigate('/dashboard-page');
     handleClosePopup();
   };
 
   return (
     <>
       <div className={style.question_container}>
-        <div
-          
-        >
+        <div>
           <div className={style.ellipse}>
             {formData.questions.map((question, index) => (
               <div key={index}>
@@ -142,24 +75,12 @@ const EditQuiz = ({ quizData, handleClosePopup }) => {
                 >
                   {index + 1}
                 </button>
-                {/* {index > 0 && (
-                  <button
-                    onClick={() => handleRemoveQuestion(index)}
-                    className={style.cross}
-                  >
-                    <img src={cross} alt="cross_logo" />
-                  </button>
-                )} */}
               </div>
             ))}
-            {/* <button onClick={handleAddQuestion}>
-              <img src={plus_logo} alt="plus_logo" className={style.plus} />
-            </button> */}
           </div>
         </div>
 
-        <div className={style.ques_container}
-        >
+        <div className={style.ques_container}>
           <input
             type="text"
             value={formData.questions[currentQuestionIndex].question}
@@ -168,55 +89,6 @@ const EditQuiz = ({ quizData, handleClosePopup }) => {
             className={style.question_input}
           />
           <br />
-          {/* <label>
-            Option Type
-            <div className={style.optionType_label}>
-              <label>
-                <input
-                  type="radio"
-                  value="text"
-                  checked={
-                    formData.questions[currentQuestionIndex].optionType ===
-                    "text"
-                  }
-                  onChange={(e) =>
-                    handleOptionTypeChange(currentQuestionIndex, e)
-                  }
-                />
-                Text
-              </label>
-
-              <label>
-                <input
-                  type="radio"
-                  value="image"
-                  checked={
-                    formData.questions[currentQuestionIndex].optionType ===
-                    "image"
-                  }
-                  onChange={(e) =>
-                    handleOptionTypeChange(currentQuestionIndex, e)
-                  }
-                />
-                Image URL
-              </label>
-
-              <label>
-                <input
-                  type="radio"
-                  value="both"
-                  checked={
-                    formData.questions[currentQuestionIndex].optionType ===
-                    "both"
-                  }
-                  onChange={(e) =>
-                    handleOptionTypeChange(currentQuestionIndex, e)
-                  }
-                />
-                Text & Image URL
-              </label>
-            </div>
-          </label> */}
 
           {formData.questions[currentQuestionIndex].options.map(
             (option, optionIndex) => (
@@ -229,32 +101,17 @@ const EditQuiz = ({ quizData, handleClosePopup }) => {
                     handleOptionChange(currentQuestionIndex, optionIndex, e)
                   }
                 />
-                {/* <button
-                  onClick={() =>
-                    handleCorrectAnswerChange(
-                      currentQuestionIndex,
-                      optionIndex
-                    )
-                  }
-                >
-                  Set Correct
-                </button> */}
-                {/* {optionIndex > 1 && (
-                  <button
-                    onClick={() =>
-                      handleRemoveOption(currentQuestionIndex, optionIndex)
-                    }
-                  >
-                    <img src={delete_logo} alt="delete_logo" />
-                  </button>
-                )} */}
               </div>
             )
           )}
 
           <div>
-            <button className={style.update_btn} onClick={handleSubmit}>Update Quiz</button>
-            <button className={style.cancel_btn} onClick={handleRemove}>Cancel</button>
+            <button className={style.update_btn} onClick={handleSubmit}>
+              Update Quiz
+            </button>
+            <button className={style.cancel_btn} onClick={handleRemove}>
+              Cancel
+            </button>
           </div>
         </div>
       </div>

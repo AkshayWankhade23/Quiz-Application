@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import eye_logo from "../../assets/eye.png"
+import eye_logo from "../../assets/eye.png";
 import style from "./Style.module.css";
 
 const Dashboard = () => {
@@ -45,24 +45,22 @@ const Dashboard = () => {
     <div className={style.dashboard_container}>
       <div className={style.dashboard_stats_container}>
         <div className={style.dashboard_stats_card}>
-            <div className={style.quiz_created}>{quizzes.length}</div>
-            <div className={style.quiz_created_text}>Quiz Created </div>
+          <div className={style.quiz_created}>{quizzes.length}</div>
+          <div className={style.quiz_created_text}>Quiz Created </div>
         </div>
 
         <div className={style.dashboard_stats_card}>
-            <div className={style.questions_created}>{questionCount}</div>
-            <div className={style.questions_created_text}>
-              questions Created{" "}
-            </div>
+          <div className={style.questions_created}>{questionCount}</div>
+          <div className={style.questions_created_text}>questions Created </div>
         </div>
 
         <div className={style.dashboard_stats_card}>
-            <div className={style.quiz_impression_created}>
-              {totalQuizImpressions}
-            </div>
-            <div className={style.quiz_impression_created_text}>
-              Total Impressions{" "}
-            </div>
+          <div className={style.quiz_impression_created}>
+            {Math.round(totalQuizImpressions / 2)}
+          </div>
+          <div className={style.quiz_impression_created_text}>
+            Total Impressions{" "}
+          </div>
         </div>
       </div>
       <div className={style.dashboard_trending_quizzes_container}>
@@ -71,21 +69,28 @@ const Dashboard = () => {
         </div>
 
         <div className={style.dashboard_quiz_cards_container}>
-          {quizzes.map((quiz) => (
-            <div key={quiz._id} className={style.dashboard_quiz_card}>
-              <div className={style.dashboard_quiz_card_text}>
-                {quiz.quizName}
+          {quizzes.map((quiz) =>
+            Math.round(quiz.impressionofQuiz) / 2 < 10 ? (
+              <></>
+            ) : (
+              <div key={quiz._id} className={style.dashboard_quiz_card}>
+                <div className={style.dashboard_quiz_card_text}>
+                  {quiz.quizName}
+                </div>
+                <div className={style.dashboard_quiz_card_num}>
+                  {Math.round(quiz.impressionofQuiz / 2)}
+                  <img
+                    className={style.eye_img}
+                    src={eye_logo}
+                    alt="eye-logo"
+                  />
+                </div>
+                <p className={style.dashboard_quiz_stats_text}>
+                  Created on: {formatDate(quiz.date)}
+                </p>
               </div>
-              <div className={style.dashboard_quiz_card_num}>
-                {quiz.impressionofQuiz}
-                <img className={style.eye_img} src={eye_logo} alt="eye-logo" />
-              </div>
-              <p className={style.dashboard_quiz_stats_text}>
-                Created on: {formatDate(quiz.date)}
-              </p>
-            </div>
-            
-          ))}
+            )
+          )}
         </div>
       </div>
     </div>

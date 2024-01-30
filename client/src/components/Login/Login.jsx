@@ -8,27 +8,24 @@ const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
 
   const handleLogin = async () => {
     try {
       const response = await axios.post('http://localhost:3000/api/user/login', { email, password });
 
       if (response.data.success) {
-        // Successfully logged in, you can handle the token or user data here
         const { token, userId } = response.data;
 
-      // Store the token and user ID in localStorage or a state management system
       localStorage.setItem('token', token);
       localStorage.setItem('userId', userId);
         navigate('/dashboard-page')
         toast.success('Login successful');
       } else {
-        setErrorMessage(response.data.error);
+        toast.error(response.data.error);
       }
     } catch (error) {
+      toast.error(error.response.data.error);
       console.error(error);
-      setErrorMessage('Internal Server Error');
     }
   };
 
@@ -48,7 +45,6 @@ const Login = () => {
             Login
           </button>
         </div>
-        {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
       </form>
     </div>
   );

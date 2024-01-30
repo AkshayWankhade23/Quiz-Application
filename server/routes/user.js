@@ -18,7 +18,7 @@ const errorHandler = (res, error) => {
 // Register Route
 router.post("/signup", async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, confirmPassword } = req.body;
 
     // Check if all required fields are provided
     if (!name || !email || !password) {
@@ -32,13 +32,18 @@ router.post("/signup", async (req, res) => {
 
     // Validate password (at least 6 characters)
     if (password.length < 6) {
-      return res.status(400).json({ error: "Password must be at least 6 characters long" });
+      return res.status(400).json({ error: "Weak password, Password must be at least 6 characters long" });
     }
 
     // Check if email is already registered
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(409).json({ error: "Email is already registered" });
+    }
+
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      return res.status(400).json({ error: "Passwords do not match" });
     }
 
     // Hash the password
@@ -50,7 +55,7 @@ router.post("/signup", async (req, res) => {
 
     // Generate JWT Token
     const token = jwt.sign({ userId: user._id, user: user.email }, process.env.JWT_SECRET_KEY);
-    console.log(user._id, "user-id");
+    // console.log(user._id, "user-id");
 
     // Return Success Response with token and user details
     res.json({

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import style from "./Style.module.css";
@@ -9,7 +9,10 @@ import { toast } from "react-hot-toast";
 
 const CreateQuiz = ({ handleClosePopup }) => {
   const navigate = useNavigate();
-  // const [showCreateQuizPopup, setShowCreateQuizPopup] = useState(true);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [showQuizDetails, setShowQuizDetails] = useState(true);
+  const [quizPublished, setQuizPublished] = useState(false);
+
   const [quizData, setQuizData] = useState({
     userId: localStorage.getItem("userId"),
     quizName: "",
@@ -28,21 +31,25 @@ const CreateQuiz = ({ handleClosePopup }) => {
         impressionofQuestion: 0,
       },
     ],
-    quizId: null, // New field to store the unique ID
+    quizId: null,
     impressionofQuiz: 0,
   });
 
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [showQuizDetails, setShowQuizDetails] = useState(true);
-  const [quizPublished, setQuizPublished] = useState(false);
+  // useEffect(() => {
+  //   setQuizData((prevData) => ({
+  //     ...prevData,
+  //     questions: prevData.questions.map((question) => ({
+  //       ...question,
+  //       optionType: "text",
+  //       timer: "OFF",
+  //     })),
+  //   }));
+  // }, []);
 
   const handleQuizNameChange = (e) => {
     setQuizData({ ...quizData, quizName: e.target.value });
   };
 
-  // const handleQuizTypeChange = (e) => {
-  //   setQuizData({ ...quizData, quizType: e.target.value });
-  // };
   const handleQuizTypeChange = (selectedType) => {
     setQuizData({ ...quizData, quizType: selectedType });
   };
@@ -63,7 +70,6 @@ const CreateQuiz = ({ handleClosePopup }) => {
     }
     updatedQuestions[questionIndex].optionType = e.target.value;
 
-    // Clear existing option values if option type is changed
     updatedQuestions[questionIndex].options = [
       { option: "", impressionofOption: 0 },
       { option: "", impressionofOption: 0 },
@@ -157,7 +163,6 @@ const CreateQuiz = ({ handleClosePopup }) => {
   };
 
   const handleContinue = () => {
-    // Check for required fields before continuing
     if (quizData.quizName.trim() === "" || quizData.quizType.trim() === "") {
       toast.error("Please fill in all required fields.");
       return;
@@ -167,7 +172,6 @@ const CreateQuiz = ({ handleClosePopup }) => {
   };
 
   const handleTabClick = (index) => {
-    // Check if index is within the valid range
     if (index >= 0 && index < quizData.numQuestions) {
       setCurrentQuestionIndex(index);
     }
@@ -193,7 +197,11 @@ const CreateQuiz = ({ handleClosePopup }) => {
   };
 
   const handleSubmit = async () => {
-    // Check for required fields before submitting
+    const token = window.localStorage.getItem("token");
+    if (!token) {
+      toast.error("Login to create a job");
+      return;
+    }
     const currentQuestion = quizData.questions[currentQuestionIndex];
     if (
       currentQuestion.question.trim() === "" ||
@@ -210,8 +218,14 @@ const CreateQuiz = ({ handleClosePopup }) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/quiz/saveQuiz",
-        quizData
+        "http://localhost:3000/api/quiz/createQuiz",
+        quizData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        }
       );
 
       if (response.data.success) {
@@ -230,6 +244,7 @@ const CreateQuiz = ({ handleClosePopup }) => {
     const inputElement = document.getElementById("quizLinkInput");
     inputElement.select();
     document.execCommand("copy");
+    toast.success("Link copied to Clipboard");
   };
 
   return (
@@ -245,21 +260,11 @@ const CreateQuiz = ({ handleClosePopup }) => {
           />
           <br />
 
-          {/* <label>
-            Quiz Type:
-            <select value={quizData.quizType} onChange={handleQuizTypeChange}>
-              <option value="">Select Type</option>
-              <option value="poll">Poll</option>
-              <option value="qa">Q&A</option>
-            </select>
-          </label> */}
-
           <label className={style.quiz_type}>
             Quiz Type
             <div>
               <button
                 onClick={() => handleQuizTypeChange("qa")}
-                // className={quizData.quizType === "qa" ? "selected" : ""}
                 className={`${style.type_button} ${
                   quizData.quizType === "qa" ? style.selected : ""
                 }`}
@@ -268,7 +273,6 @@ const CreateQuiz = ({ handleClosePopup }) => {
               </button>
               <button
                 onClick={() => handleQuizTypeChange("poll")}
-                // className={quizData.quizType === "poll" ? "selected" : ""}
                 className={`${style.type_button} ${
                   quizData.quizType === "poll" ? style.selected : ""
                 }`}
@@ -293,10 +297,7 @@ const CreateQuiz = ({ handleClosePopup }) => {
       <div className={style.question_container}>
         {!showQuizDetails && !quizPublished && (
           <>
-            {/* <button onClick={handleAddQuestion}>+ Add Question</button> */}
-
-            <div
-            >
+            <div>
               <div className={style.ellipse_container}>
                 {quizData.questions.map((question, index) => (
                   <div key={index}>
@@ -318,17 +319,14 @@ const CreateQuiz = ({ handleClosePopup }) => {
                 ))}
                 {quizData.questions.length < 5 && (
                   <button className={style.plus} onClick={handleAddQuestion}>
-                    <img
-                      src={plus_logo}
-                      alt="plus_logo"
-                    />
+                    <img src={plus_logo} alt="plus_logo" />
                   </button>
                 )}
               </div>
+              <label className={style.max_ques}>Max 5 questions</label>
             </div>
 
-            <div className={style.question_container}
-            >
+            <div className={style.question_container}>
               <input
                 type="text"
                 value={quizData.questions[currentQuestionIndex].question}
@@ -387,7 +385,6 @@ const CreateQuiz = ({ handleClosePopup }) => {
                 </div>
               </label>
 
-              {/* <div className={style.options_container}> */}
               {[
                 ...Array(
                   quizData.questions[currentQuestionIndex].options.length || 2
@@ -438,7 +435,6 @@ const CreateQuiz = ({ handleClosePopup }) => {
                               ? style.selected
                               : ""
                           }
-                          // className={style.text_image}
                         />
                         <input
                           type="link"
@@ -463,13 +459,36 @@ const CreateQuiz = ({ handleClosePopup }) => {
                               ? style.selected
                               : ""
                           }
-                          // className={style.text_image}
                         />
                       </div>
-                    ) : (
+                    ) : quizData.questions[currentQuestionIndex].optionType ===
+                      "text" ? (
                       <input
                         type="text"
                         placeholder="Text"
+                        value={
+                          quizData.questions[currentQuestionIndex].options[
+                            optionIndex
+                          ]?.option || ""
+                        }
+                        onChange={(e) =>
+                          handleOptionChange(
+                            currentQuestionIndex,
+                            optionIndex,
+                            e
+                          )
+                        }
+                        className={
+                          quizData.questions[currentQuestionIndex]
+                            .correctOption === optionIndex
+                            ? style.selected
+                            : ""
+                        }
+                      />
+                    ) : (
+                      <input
+                        type="text"
+                        placeholder="Image URL"
                         value={
                           quizData.questions[currentQuestionIndex].options[
                             optionIndex

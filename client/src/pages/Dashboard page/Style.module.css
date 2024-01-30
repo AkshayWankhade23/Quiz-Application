@@ -21,7 +21,8 @@
 }
 
 .dashboard_content {
-  margin-left: 18vw;
+  margin-left: 16.8vw;
+  /* margin-left: auto; */
   padding: 20px; 
   overflow-y: auto; 
 }
@@ -89,7 +90,8 @@ line-height: normal;
   flex-shrink: 0;
   stroke-width: 1px;
   background: #000;
-  margin-top: 12rem;
+  margin-top: 10rem;
+  margin-bottom: 1rem;
 }
 
 .logout_btn {
@@ -100,7 +102,7 @@ line-height: normal;
   font-weight: 700;
   line-height: normal;
   text-transform: uppercase;
-  margin-top: 1rem;
+  margin-top: 0rem;
   background: none;
   border: none;
 }

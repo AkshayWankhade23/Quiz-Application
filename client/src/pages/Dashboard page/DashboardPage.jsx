@@ -29,16 +29,12 @@ const DashboardPage = () => {
   }, [activeTab]);
 
   const handleCreateQuizClick = () => {
-    // Set the state to show the create quiz pop-up
     setShowCreateQuizPopup(true);
   };
 
-
   const handleClosePopup = () => {
-    // Set the state to hide the create quiz pop-up
     setShowCreateQuizPopup(false);
   };
-
 
   return (
     <div className={style.main}>
@@ -46,33 +42,29 @@ const DashboardPage = () => {
         <h3>QUIZZIE</h3>
         <button
           onClick={() => setActiveTab(1)}
-          className={`${style.button} ${
-            activeTab === 1 && style.active
-          }`}
+          className={`${style.button} ${activeTab === 1 && style.active}`}
         >
           Dashboard
         </button>{" "}
         <br />
         <button
           onClick={() => setActiveTab(2)}
-          className={`${style.button} ${
-            activeTab === 2 && style.active
-          }`}
+          className={`${style.button} ${activeTab === 2 && style.active}`}
         >
           Analytics
         </button>{" "}
         <br />
         <button
           onClick={handleCreateQuizClick}
-          className={`${style.button} ${
-            activeTab === 3 && style.active
-          }`}
+          className={`${style.button} ${activeTab === 3 && style.active}`}
         >
           Create Quiz
         </button>{" "}
         <br />
         <div className={style.line}></div>
-        <button onClick={handleLogout} className={style.logout_btn}>Logout</button>
+        <button onClick={handleLogout} className={style.logout_btn}>
+          Logout
+        </button>
       </div>
 
       <div className={style.dashboard_content}>
@@ -81,16 +73,9 @@ const DashboardPage = () => {
         {activeTab === 3 && <CreateQuiz />}
       </div>
       {showCreateQuizPopup && (
-        <div
-          className={style.createquiz_popup}
-        >
-          <div
-            className={style.create_quiz}
-          >
-            {/* Render the Createquiz component in the pop-up */}
+        <div className={style.createquiz_popup}>
+          <div className={style.create_quiz}>
             <CreateQuiz handleClosePopup={handleClosePopup} />
-
-            {/* <button onClick={handleClosePopup} className={style.cancle_btn} >Canc</button> */}
           </div>
         </div>
       )}
@@ -99,4 +84,3 @@ const DashboardPage = () => {
 };
 
 export default DashboardPage;
-

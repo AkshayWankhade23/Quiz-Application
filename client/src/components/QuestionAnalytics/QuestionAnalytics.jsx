@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -12,9 +13,8 @@ const QuestionAnalytics = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const token = localStorage.getItem("token"); // Assuming you store userId in localStorage
+        const token = localStorage.getItem("token");
 
-        // Fetch quizzes with impressions
         const quiz = await axios.get(
           `http://localhost:3000/api/quiz/getquiz/${quizId}`
         );
@@ -36,22 +36,25 @@ const QuestionAnalytics = () => {
       <h2>{currentquiz.quizName} Question Analysis</h2>
       <p className={style.red}>Created on: {currentquiz.date}</p>
       <br />
-      <p className={style.red}>Impressions: {currentquiz.impressionofQuiz}</p>
+      <p className={style.red}>
+        Impressions: {currentquiz.impressionofQuiz / 2}
+      </p>
       {quiztype === "poll" ? (
         <>
           <ul>
             {questions.map((questionInfo, index) => (
               <li key={index}>
-                <p>
+                <p className={style.question_info}>
                   Q.{index + 1} : {questionInfo.question}
                 </p>
-                {questionInfo.options.map((opt, optIndex) => (
-                  // Add a return statement here
-                  <p key={optIndex}>
-                    No of people opted for Option {optIndex + 1} is{" "}
-                    {opt.impressionofOption}
-                  </p>
-                ))}
+                <div className={style.cards_container}>
+                  {questionInfo.options.map((opt, optIndex) => (
+                    <div className={style.cards} key={optIndex}>
+                      <h4 className={style.value}>{opt.impressionofOption}</h4>
+                      <p className={style.text}>Option {optIndex + 1}</p>
+                    </div>
+                  ))}
+                </div>
               </li>
             ))}
           </ul>
@@ -61,21 +64,27 @@ const QuestionAnalytics = () => {
           {questions.map((questionInfo, index) => (
             <li key={index}>
               <p className={style.question_info}>
-                Q.{index + 1}  {questionInfo.question}
+                Q.{index + 1} {questionInfo.question}
               </p>
               <div className={style.cards_container}>
                 <div className={style.cards}>
-                  <h4 className={style.value}> {questionInfo.impressionofQuestion} </h4>
+                  <h4 className={style.value}>
+                    {" "}
+                    {questionInfo.impressionofQuestion / 2}{" "}
+                  </h4>
                   <p className={style.text}>People Attempted Question</p>
                 </div>
                 <div className={style.cards}>
-                  <h4 className={style.value} >{questionInfo.answeredCorrectly}</h4>
+                  <h4 className={style.value}>
+                    {questionInfo.answeredCorrectly / 2}
+                  </h4>
                   <p className={style.text}> Answered Correctly </p>
                 </div>
                 <div className={style.cards}>
                   <h4 className={style.value}>
-                    {questionInfo.impressionofQuestion -
-                      questionInfo.answeredCorrectly}
+                    {(questionInfo.impressionofQuestion -
+                      questionInfo.answeredCorrectly) /
+                      2}
                   </h4>
                   <p className={style.text}>Answered Incorrectly</p>
                 </div>
