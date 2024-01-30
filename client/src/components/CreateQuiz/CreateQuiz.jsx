@@ -625,7 +625,7 @@ const CreateQuiz = ({ handleClosePopup }) => {
               <input
                 placeholder="your link is here"
                 type="text"
-                value={`${server}livequiz/${quizData.quizId}`}
+                value={`https://quiz-application-gold.vercel.app/livequiz/${quizData.quizId}`}
                 readOnly
                 className={style.link_input}
                 id="quizLinkInput"
