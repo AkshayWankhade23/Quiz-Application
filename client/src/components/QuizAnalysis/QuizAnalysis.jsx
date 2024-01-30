@@ -104,7 +104,7 @@ const QuizAnalysis = () => {
   };
 
   const handleShareQuiz = (quizId) => {
-    const quizLink = `http://localhost:3001/livequiz/${quizId}`;
+    const quizLink = `https://quiz-application-gold.vercel.app/livequiz/${quizId}`;
     console.log(`Sharing quiz with ID: ${quizId} and link: ${quizLink}`);
 
     navigator.clipboard
