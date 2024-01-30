@@ -625,7 +625,7 @@ const CreateQuiz = ({ handleClosePopup }) => {
               <input
                 placeholder="your link is here"
                 type="text"
-                value={`http://localhost:3001/livequiz/${quizData.quizId}`}
+                value={`${server}livequiz/${quizData.quizId}`}
                 readOnly
                 className={style.link_input}
                 id="quizLinkInput"
