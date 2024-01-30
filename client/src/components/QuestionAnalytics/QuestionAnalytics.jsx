@@ -38,7 +38,7 @@ const QuestionAnalytics = () => {
       <p className={style.red}>Created on: {currentquiz.date}</p>
       <br />
       <p className={style.red}>
-        Impressions: {currentquiz.impressionofQuiz / 2}
+        Impressions: {currentquiz.impressionofQuiz}
       </p>
       {quiztype === "poll" ? (
         <>
@@ -71,21 +71,20 @@ const QuestionAnalytics = () => {
                 <div className={style.cards}>
                   <h4 className={style.value}>
                     {" "}
-                    {questionInfo.impressionofQuestion / 2}{" "}
+                    {questionInfo.impressionofQuestion}{" "}
                   </h4>
                   <p className={style.text}>People Attempted Question</p>
                 </div>
                 <div className={style.cards}>
                   <h4 className={style.value}>
-                    {questionInfo.answeredCorrectly / 2}
+                    {questionInfo.answeredCorrectly }
                   </h4>
                   <p className={style.text}> Answered Correctly </p>
                 </div>
                 <div className={style.cards}>
                   <h4 className={style.value}>
                     {(questionInfo.impressionofQuestion -
-                      questionInfo.answeredCorrectly) /
-                      2}
+                      questionInfo.answeredCorrectly)}
                   </h4>
                   <p className={style.text}>Answered Incorrectly</p>
                 </div>

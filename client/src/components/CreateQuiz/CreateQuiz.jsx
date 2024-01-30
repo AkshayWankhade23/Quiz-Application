@@ -27,8 +27,8 @@ const CreateQuiz = ({ handleClosePopup }) => {
           { option: "", impressionofOption: 0 },
         ],
         correctOption: null,
-        optionType: "",
-        timer: "",
+        optionType: "text",
+        timer: "OFF",
         impressionofQuestion: 0,
       },
     ],
@@ -36,16 +36,16 @@ const CreateQuiz = ({ handleClosePopup }) => {
     impressionofQuiz: 0,
   });
 
-  // useEffect(() => {
-  //   setQuizData((prevData) => ({
-  //     ...prevData,
-  //     questions: prevData.questions.map((question) => ({
-  //       ...question,
-  //       optionType: "text",
-  //       timer: "OFF",
-  //     })),
-  //   }));
-  // }, []);
+  useEffect(() => {
+    setQuizData((prevData) => ({
+      ...prevData,
+      questions: prevData.questions.map((question) => ({
+        ...question,
+        optionType: "text",
+        timer: "OFF",
+      })),
+    }));
+  }, []);
 
   const handleQuizNameChange = (e) => {
     setQuizData({ ...quizData, quizName: e.target.value });
@@ -421,7 +421,7 @@ const CreateQuiz = ({ handleClosePopup }) => {
                               optionIndex
                             ]?.option
                               .split("***")[0]
-                              ?.trim() || ""
+                               || ""
                           }
                           onChange={(e) =>
                             handleOptionCombinedChange(
@@ -434,7 +434,7 @@ const CreateQuiz = ({ handleClosePopup }) => {
                             quizData.questions[currentQuestionIndex]
                               .correctOption === optionIndex
                               ? style.selected
-                              : ""
+                              : style.txt_img
                           }
                         />
                         <input
@@ -458,7 +458,7 @@ const CreateQuiz = ({ handleClosePopup }) => {
                             quizData.questions[currentQuestionIndex]
                               .correctOption === optionIndex
                               ? style.selected
-                              : ""
+                              : style.txt_img
                           }
                         />
                       </div>

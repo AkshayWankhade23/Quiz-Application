@@ -32,7 +32,7 @@ function App() {
       <Router>
       <Toaster position="top-center" toastOptions={{ duration: 2000 }} />
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/:display?" element={<Home />} />
             <Route path="/dashboard-page" element={<DashboardPage />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/create-quiz" element={<CreateQuiz handleShareQuiz={handleShareQuiz} />} />

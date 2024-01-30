@@ -33,7 +33,7 @@ const Signup = () => {
       localStorage.setItem("token", token);
       localStorage.setItem("userId", userId);
 
-      navigate("/dashboard-page");
+      navigate("/login");
       toast.success("Signup successful!");
     } catch (error) {
       toast.error(error.response.data.error);

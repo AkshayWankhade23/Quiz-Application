@@ -145,7 +145,7 @@ input {
   color: #fff;
   box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.25);
   align-items: center;
-  margin: 2rem 0rem 0rem 12rem;
+  margin-top: 2rem;
   border: none;
 }
 .share_btn:hover {
@@ -231,7 +231,10 @@ input {
   flex-shrink: 0;
   border-radius: 10px;
   background: #fff;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .quiz_published h3 {
@@ -242,7 +245,6 @@ input {
   font-style: normal;
   font-weight: 600;
   line-height: normal;
-  text-align: center;
 }
 
 .selectedButton {
@@ -269,6 +271,7 @@ input {
   border: none;
   float: right;
   margin-top: 0rem;
+  margin-left: 90%;
 }
 
 .plus {
@@ -338,4 +341,11 @@ input {
   font-weight: 500;
   line-height: normal;
   margin-top: -3rem;
+}
+
+.txt_img {
+  width: 10.53531rem;
+  height: 2.125rem;
+  flex-shrink: 0;
+  margin-top: 2rem;
 }

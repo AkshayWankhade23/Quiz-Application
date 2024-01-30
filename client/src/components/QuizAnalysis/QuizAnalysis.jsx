@@ -150,7 +150,10 @@ const QuizAnalysis = () => {
                 <td>{index + 1}</td>
                 <td>{quiz.quizName}</td>
                 <td>{formatDate(quiz.date)}</td>
-                <td>{Math.round(quiz.impressionofQuiz / 2)}</td>
+                <td>
+                  {quiz.impressionofQuiz}
+                  {/* {Math.round(quiz.impressionofQuiz / 2)} */}
+                </td> 
                 <td>
                   <button
                     className={style.btn}

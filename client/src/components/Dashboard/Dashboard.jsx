@@ -57,7 +57,7 @@ const Dashboard = () => {
 
         <div className={style.dashboard_stats_card}>
           <div className={style.quiz_impression_created}>
-            {Math.round(totalQuizImpressions / 2)}
+            {totalQuizImpressions}
           </div>
           <div className={style.quiz_impression_created_text}>
             Total Impressions{" "}
@@ -71,7 +71,7 @@ const Dashboard = () => {
 
         <div className={style.dashboard_quiz_cards_container}>
           {quizzes.map((quiz) =>
-            Math.round(quiz.impressionofQuiz) / 2 < 10 ? (
+            quiz.impressionofQuiz < 11 ? (
               <></>
             ) : (
               <div key={quiz._id} className={style.dashboard_quiz_card}>
@@ -79,7 +79,7 @@ const Dashboard = () => {
                   {quiz.quizName}
                 </div>
                 <div className={style.dashboard_quiz_card_num}>
-                  {Math.round(quiz.impressionofQuiz / 2)}
+                  {quiz.impressionofQuiz }
                   <img
                     className={style.eye_img}
                     src={eye_logo}
