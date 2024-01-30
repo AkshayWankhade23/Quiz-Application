@@ -4,6 +4,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import trophy_logo from "../../assets/trophy.png";
 import style from "./Style.module.css";
+import { server } from "../../App";
 
 function LiveQuiz() {
   const { quizId } = useParams();
@@ -17,7 +18,7 @@ function LiveQuiz() {
     const fetchQuizData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/quiz/get-live-quiz/${quizId}`
+          `${server}api/quiz/get-live-quiz/${quizId}`
         );
         const data = response.data;
         console.log(data.quiz);
@@ -44,7 +45,7 @@ function LiveQuiz() {
       const sendQuizDataToBackend = async () => {
         try {
           const response = await axios.post(
-            "http://localhost:3000/api/quiz/updateQuiz",
+            `${server}api/quiz/updateQuiz`,
             {
               quizData,
             }

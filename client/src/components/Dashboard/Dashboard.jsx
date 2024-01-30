@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import eye_logo from "../../assets/eye.png";
 import style from "./Style.module.css";
+import { server } from "../../App";
 
 const Dashboard = () => {
   const [quizzes, setQuizzes] = useState([]);
@@ -13,7 +14,7 @@ const Dashboard = () => {
       try {
         const userId = localStorage.getItem("userId");
         const quizResponse = await axios.get(
-          `http://localhost:3000/api/quiz/quizzesWithImpressions/${userId}`
+          `${server}api/quiz/quizzesWithImpressions/${userId}`
         );
         const fetchedQuizzes = quizResponse.data.quizzes;
         const totalQuizImpressions = fetchedQuizzes.reduce(
@@ -25,7 +26,7 @@ const Dashboard = () => {
         setQuizzes(fetchedQuizzes);
 
         const questionResponse = await axios.get(
-          `http://localhost:3000/api/quiz/questionCount/${userId}`
+          `${server}api/quiz/questionCount/${userId}`
         );
         setQuestionCount(questionResponse.data.questionCount);
       } catch (error) {

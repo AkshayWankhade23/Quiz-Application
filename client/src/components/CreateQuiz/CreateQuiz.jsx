@@ -6,6 +6,7 @@ import cross_logo from "../../assets/charm_cross.png";
 import delete_logo from "../../assets/delete.png";
 import plus_logo from "../../assets/plus.png";
 import { toast } from "react-hot-toast";
+import { server } from "../../App";
 
 const CreateQuiz = ({ handleClosePopup }) => {
   const navigate = useNavigate();
@@ -218,7 +219,7 @@ const CreateQuiz = ({ handleClosePopup }) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/quiz/createQuiz",
+        `${server}api/quiz/createQuiz`,
         quizData,
         {
           headers: {

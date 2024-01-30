@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import style from "./Style.module.css";
+import { server } from "../../App";
 
 const EditQuiz = ({ quizData, handleClosePopup }) => {
   const [formData, setFormData] = useState(quizData);
@@ -37,7 +38,7 @@ const EditQuiz = ({ quizData, handleClosePopup }) => {
     }
     try {
       const response = await axios.patch(
-        `http://localhost:3000/api/quiz/editQuiz/${formData._id}`,
+        `${server}api/quiz/editQuiz/${formData._id}`,
         formData,
         {
           headers: {

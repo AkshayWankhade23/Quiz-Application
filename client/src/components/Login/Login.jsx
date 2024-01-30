@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import style from "./Style.module.css"
 import toast from 'react-hot-toast';
+import { server } from '../../App';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/api/user/login', { email, password });
+      const response = await axios.post(`${server}api/user/login`, { email, password });
 
       if (response.data.success) {
         const { token, userId } = response.data;

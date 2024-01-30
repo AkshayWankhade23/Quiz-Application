@@ -6,6 +6,7 @@ import delete_logo from "../../assets/delete.png";
 import share_logo from "../../assets/share.png";
 import EditQuiz from "../EditQuiz/EditQuiz";
 import { toast } from "react-hot-toast";
+import { server } from "../../App";
 
 const QuizAnalysis = () => {
   const [quizzes, setQuizzes] = useState([]);
@@ -23,7 +24,7 @@ const QuizAnalysis = () => {
         const userId = localStorage.getItem("userId");
 
         const quizResponse = await axios.get(
-          `http://localhost:3000/api/quiz/quizzesWithImpressions/${userId}`
+          `${server}api/quiz/quizzesWithImpressions/${userId}`
         );
         const fetchedQuizzes = quizResponse.data.quizzes;
 
@@ -36,7 +37,7 @@ const QuizAnalysis = () => {
         setQuizzes(fetchedQuizzes);
 
         const questionResponse = await axios.get(
-          `http://localhost:3000/api/quiz/questionCount/${userId}`
+          `${server}api/quiz/questionCount/${userId}`
         );
         setQuestionCount(questionResponse.data.questionCount);
       } catch (error) {
@@ -55,7 +56,7 @@ const QuizAnalysis = () => {
   const handleEditQuiz = async (quizId, updatedData) => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/quiz/getquiz/${quizId}`
+        `${server}api/quiz/getquiz/${quizId}`
       );
 
       if (response.data.quiz) {
@@ -80,7 +81,7 @@ const QuizAnalysis = () => {
 
     try {
       const response = await axios.delete(
-        `http://localhost:3000/api/quiz/deleteQuiz/${quizId}`,
+        `${server}api/quiz/deleteQuiz/${quizId}`,
         {
           headers: {
             "Content-Type": "application/json",

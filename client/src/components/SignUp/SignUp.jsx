@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import style from "./Style.module.css";
+import { server } from "../../App";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const Signup = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/user/signup",
+        `${server}api/user/signup`,
         formData
       );
 

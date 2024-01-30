@@ -9,6 +9,8 @@ import QuestionAnalytics from "./components/QuestionAnalytics/QuestionAnalytics"
 import DashboardPage from "./pages/Dashboard page/DashboardPage";
 import { Toaster } from "react-hot-toast";
 
+export const server = "https://quizzie-qtot.onrender.com/";
+
 const handleShareQuiz = (quizId) => {
   const quizLink = `http://localhost:3001/livequiz/${quizId}`;
   console.log(`Sharing quiz with ID: ${quizId} and link: ${quizLink}`);

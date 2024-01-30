@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import style from "./Style.module.css";
+import { server } from "../../App";
 
 const QuestionAnalytics = () => {
   const { quizId } = useParams();
@@ -16,7 +17,7 @@ const QuestionAnalytics = () => {
         const token = localStorage.getItem("token");
 
         const quiz = await axios.get(
-          `http://localhost:3000/api/quiz/getquiz/${quizId}`
+          `${server}api/quiz/getquiz/${quizId}`
         );
         const fetchedquiz = quiz.data.quiz;
         console.log(fetchedquiz);
