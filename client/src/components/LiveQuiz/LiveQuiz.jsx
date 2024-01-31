@@ -181,7 +181,7 @@ function LiveQuiz() {
                 ? style.selected
                 : ""
             }`}
-            style={{ width: "100%", overflow: "hidden" }}
+            style={{ overflow: "hidden" }}
           >
             <div className={style.both_option_text}>
               {currentOption.option.split("***")[0]}
