@@ -79,8 +79,8 @@
   font-style: normal;
   font-weight: 600;
   line-height: normal;
-  margin-left: -1rem;
-  /* margin-right: 1rem; */
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
   padding: 10px 10px;
   display: flex;
   justify-content: center;
@@ -103,8 +103,8 @@
 }
 
 .both_option {
-  /* width: 20.25rem; */
-  width: 100%;
+  width: 20.25rem;
+  /* width: 100%; */
   height: 9.9375rem;
   flex-shrink: 0;
   display: flex;
