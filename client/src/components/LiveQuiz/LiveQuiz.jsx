@@ -181,12 +181,15 @@ function LiveQuiz() {
                 ? style.selected
                 : ""
             }`}
+            style={{ width: "100%", overflow: "hidden" }}
           >
             <div className={style.both_option_text}>
               {currentOption.option.split("***")[0]}
             </div>
-            <div>
-              <img
+            <div className={style.both_option_text}>
+              why csss is not getting applied to this image i want to reduce the size of image and it should fit inside parent div
+              <img 
+                className={style.both_option_img}
                 src={currentOption.option.split("***")[1]}
                 alt="option_image"
               />

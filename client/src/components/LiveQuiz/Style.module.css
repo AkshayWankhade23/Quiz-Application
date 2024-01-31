@@ -68,7 +68,7 @@
 }
 
 .text_option {
-  width: 20rem;
+  width: 18;
   height: 7rem;
   flex-shrink: 0;
   border-radius: 0.625rem;
@@ -79,8 +79,8 @@
   font-style: normal;
   font-weight: 600;
   line-height: normal;
-  margin-left: 1rem;
-  margin-right: 1rem;
+  margin-left: -1rem;
+  /* margin-right: 1rem; */
   padding: 10px 10px;
   display: flex;
   justify-content: center;
@@ -103,7 +103,8 @@
 }
 
 .both_option {
-  width: 20.25rem;
+  /* width: 20.25rem; */
+  width: 100%;
   height: 9.9375rem;
   flex-shrink: 0;
   display: flex;
@@ -116,9 +117,20 @@
   gap: 2rem;
   margin-left: 1rem;
   margin-right: 1rem;
+  overflow: hidden;
 }
 .both_option.selected {
   border: 5px solid #5076ff;
+}
+
+.both_option_img {
+  max-width: 100%;
+  height: auto;
+}
+.both_option img {
+  width: 3.5rem;
+  height: 4.8125rem;
+  flex-shrink: 0;
 }
 
 .submit_btn {

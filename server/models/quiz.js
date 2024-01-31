@@ -1,11 +1,11 @@
-// quiz.js
+
 const mongoose = require("mongoose");
 const User = require("./user");
 
 const quizSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User", // References the User model
+    ref: "User", 
     required: true,
   },
   quizName: { type: String, required: true },

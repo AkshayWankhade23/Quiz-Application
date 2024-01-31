@@ -30,8 +30,8 @@ h2 {
 }
 
 .question_info {
-  width: 800px;
-  height: 36px;
+  width: 80vw;
+  height: 2.25rem;
   flex-shrink: 0;
   color: #000;
   font-family: Poppins;
@@ -39,6 +39,7 @@ h2 {
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+  margin-bottom: 3rem;
 }
 
 .cards_container {
@@ -74,6 +75,6 @@ h2 {
   margin-top: -1rem;
 }
 
-ul{
-    list-style-type: none
+ul {
+  list-style-type: none;
 }

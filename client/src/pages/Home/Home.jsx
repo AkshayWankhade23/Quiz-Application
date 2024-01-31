@@ -6,7 +6,6 @@ import { useParams } from "react-router-dom";
 
 const Home = () => {
   const { display } = useParams();
-  console.log(display);
 
   const [selectedButton, setSelectedButton] = useState("");
   const [displayComponent, setDisplayComponent] = useState("");
@@ -49,7 +48,7 @@ const Home = () => {
       </div>
       <div className={style.signup_page}>
         {displayComponent === "signup" && <Signup />}
-        {console.log(displayComponent + " hi there")}
+        {/* {console.log(displayComponent + " hi there")} */}
         {displayComponent === "login" && <Login />}
       </div>
     </div>
