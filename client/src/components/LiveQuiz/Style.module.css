@@ -114,14 +114,19 @@
   font-weight: 600;
   line-height: normal;
   gap: 2rem;
-  margin-left: 1rem;
+  margin-left: 0.5rem;
   margin-right: 1rem;
   overflow: hidden;
 }
 .both_option.selected {
   border: 5px solid #5076ff;
 }
-
+.both_option_text {
+  width: 9.5rem;
+  height: 6.5rem;
+  flex-shrink: 0;
+  padding: 5px 5px;
+}
 .both_option_img {
   max-width: 100%;
   height: auto;
