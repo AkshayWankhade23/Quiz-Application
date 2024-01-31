@@ -209,7 +209,6 @@ function LiveQuiz() {
               Your Score is {score}/{quizData.numQuestions}
             </p>
           </div>
-          {/* {console.log(quizData)} */}
         </div>
       );
     }
@@ -221,7 +220,6 @@ function LiveQuiz() {
               Thank you for participating in the Poll
             </p>
           </div>
-          {/* {console.log(quizData)} */}
         </div>
       );
     }
