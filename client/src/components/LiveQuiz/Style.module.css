@@ -91,7 +91,7 @@
 }
 
 .image_option {
-  width: 20.25rem;
+  width: 18rem;
   height: 9.9375rem;
   border-radius: 0.625rem;
   background: #f0f0f0;
@@ -103,8 +103,7 @@
 }
 
 .both_option {
-  width: 20.25rem;
-  /* width: 100%; */
+  width: 18rem;
   height: 9.9375rem;
   flex-shrink: 0;
   display: flex;
@@ -128,9 +127,10 @@
   height: auto;
 }
 .both_option img {
-  width: 3.5rem;
-  height: 4.8125rem;
+  width: 8.5rem;
+  height: 7.5625rem;
   flex-shrink: 0;
+  padding: 10px 10px;
 }
 
 .submit_btn {
