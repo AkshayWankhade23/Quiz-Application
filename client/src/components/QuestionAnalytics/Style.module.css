@@ -1,10 +1,7 @@
 .container {
-  width: 98vw;
+  width: 79vw;
   height: auto;
   background: #ededed;
-  /* margin-left: 20vw;
-  position: relative;
-  position: fixed; */
 }
 
 h2 {
@@ -25,12 +22,12 @@ h2 {
   font-style: normal;
   font-weight: 600;
   line-height: normal;
-  margin-right: 2rem;
+  margin-right: 0rem;
   margin-top: -5rem;
 }
 
 .question_info {
-  width: 80vw;
+  width: auto;
   height: 2.25rem;
   flex-shrink: 0;
   color: #000;

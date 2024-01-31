@@ -6,6 +6,7 @@ import delete_logo from "../../assets/delete.png";
 import share_logo from "../../assets/share.png";
 import EditQuiz from "../EditQuiz/EditQuiz";
 import { toast } from "react-hot-toast";
+import QuestionAnalytics from "../QuestionAnalytics/QuestionAnalytics";
 import { server } from "../../App";
 
 const QuizAnalysis = () => {
@@ -17,6 +18,8 @@ const QuizAnalysis = () => {
   const [selectedQuizData, setSelectedQuizData] = useState(null);
   const [showDeleteQuizPopup, setShowDeleteQuizPopup] = useState(false);
   const [quizToDelete, setQuizToDelete] = useState(null);
+  const [showQuestionAnalytics, setShowQuestionAnalytics] = useState(false);
+  const [currentQuizId, setCurrentQuizId] = useState(null);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -63,7 +66,6 @@ const QuizAnalysis = () => {
         const quizData = response.data.quiz;
         setSelectedQuizData(quizData);
         setShowCreateQuizPopup(true);
-        console.log("Quiz data retrieved:", quizData);
       } else {
         console.error("Quiz not found with ID:", quizId);
       }
@@ -91,7 +93,6 @@ const QuizAnalysis = () => {
       );
 
       if (response.status === 200) {
-        console.log(response.data.message);
         setDeleted(true);
         setShowDeleteQuizPopup(false);
         toast.success("Quiz deleted successfully!");
@@ -105,12 +106,10 @@ const QuizAnalysis = () => {
 
   const handleShareQuiz = (quizId) => {
     const quizLink = `https://quiz-application-gold.vercel.app/livequiz/${quizId}`;
-    console.log(`Sharing quiz with ID: ${quizId} and link: ${quizLink}`);
 
     navigator.clipboard
       .writeText(quizLink)
       .then(() => {
-        console.log("Quiz link copied to clipboard:", quizLink);
         toast.success("Quiz link copied to clipboard!");
       })
       .catch((error) => {
@@ -124,6 +123,7 @@ const QuizAnalysis = () => {
   };
 
   return (
+    showQuestionAnalytics&&currentQuizId?<QuestionAnalytics quizId={currentQuizId}/>:
     <div className={style.main}>
       <div className={style.header}>Quiz Analysis</div>
 
@@ -150,10 +150,7 @@ const QuizAnalysis = () => {
                 <td>{index + 1}</td>
                 <td>{quiz.quizName}</td>
                 <td>{formatDate(quiz.date)}</td>
-                <td>
-                  {quiz.impressionofQuiz}
-                  {/* {Math.round(quiz.impressionofQuiz / 2)} */}
-                </td> 
+                <td>{ quiz.impressionofQuiz }</td>
                 <td>
                   <button
                     className={style.btn}
@@ -197,12 +194,18 @@ const QuizAnalysis = () => {
                   </button>
                 </td>
                 <td>
-                  {
-                    <a href={`/question-analysis/${quiz._id}`}>
-                      Question Analytics
-                    </a>
-                  }
+                  <a
+                    href={`/question-analysis/${quiz._id}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setCurrentQuizId(quiz._id);
+                      setShowQuestionAnalytics(true);
+                    }}
+                  >
+                    Question Analytics
+                  </a>
                 </td>
+
               </tr>
             ))}
           </tbody>

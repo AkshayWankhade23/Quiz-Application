@@ -7,7 +7,6 @@ import { server } from "../../App";
 
 const Signup = () => {
   const navigate = useNavigate();
-  // const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -23,10 +22,7 @@ const Signup = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        `${server}api/user/signup`,
-        formData
-      );
+      const response = await axios.post(`${server}api/user/signup`, formData);
 
       const { token, userId } = response.data;
 

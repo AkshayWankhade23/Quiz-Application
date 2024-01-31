@@ -48,7 +48,7 @@ const DashboardPage = () => {
         </button>{" "}
         <br />
         <button
-          onClick={() => setActiveTab(2)}
+          onClick={() => (activeTab === 4 ? setActiveTab(2) : setActiveTab(4))}
           className={`${style.button} ${activeTab === 2 && style.active}`}
         >
           Analytics
@@ -69,7 +69,8 @@ const DashboardPage = () => {
 
       <div className={style.dashboard_content}>
         {activeTab === 1 && <Dashboard />}
-        {activeTab === 2 && <QuizAnalysis />}
+        {activeTab === 2 && <QuizAnalysis quizId={Math.random() * 10000} />}
+        {activeTab === 4 && <QuizAnalysis quizId={Math.random() * 10000} />}
         {activeTab === 3 && <CreateQuiz />}
       </div>
       {showCreateQuizPopup && (

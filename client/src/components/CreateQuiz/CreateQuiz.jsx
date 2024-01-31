@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import style from "./Style.module.css";
 import cross_logo from "../../assets/charm_cross.png";
@@ -9,7 +8,6 @@ import { toast } from "react-hot-toast";
 import { server } from "../../App";
 
 const CreateQuiz = ({ handleClosePopup }) => {
-  const navigate = useNavigate();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [showQuizDetails, setShowQuizDetails] = useState(true);
   const [quizPublished, setQuizPublished] = useState(false);
@@ -419,9 +417,7 @@ const CreateQuiz = ({ handleClosePopup }) => {
                           value={
                             quizData.questions[currentQuestionIndex]?.options[
                               optionIndex
-                            ]?.option
-                              .split("***")[0]
-                               || ""
+                            ]?.option.split("***")[0] || ""
                           }
                           onChange={(e) =>
                             handleOptionCombinedChange(

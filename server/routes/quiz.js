@@ -9,12 +9,10 @@ router.post("/createQuiz", requireAuth, async (req, res) => {
   try {
     const quizData = req.body;
 
-    // Ensure that userId is properly set to a valid ObjectId
     if (!mongoose.Types.ObjectId.isValid(quizData.userId)) {
       return res.status(400).json({ success: false, error: "Invalid userId" });
     }
 
-    // Save quiz data to the database
     const savedQuiz = await Quiz.create(quizData);
     res.status(201).json({ success: true, quizId: savedQuiz._id });
   } catch (error) {
@@ -27,7 +25,6 @@ router.get("/quizCount/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
 
-    // Ensure that userId is properly set to a valid ObjectId
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return res.status(400).json({ success: false, error: "Invalid userId" });
     }
@@ -44,7 +41,6 @@ router.get("/questionCount/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
 
-    // Ensure that userId is properly set to a valid ObjectId
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return res.status(400).json({ success: false, error: "Invalid userId" });
     }
@@ -65,13 +61,11 @@ router.get("/quizzesWithImpressions/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
 
-    // Ensure that userId is properly set to a valid ObjectId
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return res.status(400).json({ success: false, error: "Invalid userId" });
     }
 
-    // Fetch quizzes with impressions
-    const quizzes = await Quiz.find({ userId }).select("-questions.options"); // Exclude options for brevity
+    const quizzes = await Quiz.find({ userId }).select("-questions.options");
 
     res.json({ quizzes });
   } catch (error) {
@@ -84,14 +78,11 @@ router.get("/getquiz/:quizId", async (req, res) => {
   try {
     const _id = req.params.quizId;
 
-    // Ensure that _id is properly set to a valid ObjectId
     if (!mongoose.Types.ObjectId.isValid(_id)) {
       return res.status(400).json({ success: false, error: "Invalid quizId" });
     }
 
-    // Fetch quizzes with impressions
     const quiz = await Quiz.findOne({ _id });
-    // quiz.impressionofQuiz += 1;
     const result = await Quiz.findByIdAndUpdate(_id, quiz);
     res.json({ quiz });
   } catch (error) {
@@ -103,20 +94,16 @@ router.get("/get-live-quiz/:quizId", async (req, res) => {
   try {
     const _id = req.params.quizId;
 
-    // Ensure that _id is properly set to a valid ObjectId
     if (!mongoose.Types.ObjectId.isValid(_id)) {
       return res.status(400).json({ success: false, error: "Invalid quizId" });
     }
 
-    // Fetch quiz by ID
     const quiz = await Quiz.findOne({ _id });
 
-    // If quiz is not found, return an error
     if (!quiz) {
       return res.status(404).json({ success: false, error: "Quiz not found" });
     }
 
-    // Increment impressionofQuiz and save the updated quiz
     quiz.impressionofQuiz = (quiz.impressionofQuiz || 0) + 1;
     await quiz.save();
 
@@ -126,25 +113,6 @@ router.get("/get-live-quiz/:quizId", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-// router.get("/get-live-quiz/:quizId", async (req, res) => {
-//   try {
-//     const _id = req.params.quizId;
-
-//     // Ensure that _id is properly set to a valid ObjectId
-//     if (!mongoose.Types.ObjectId.isValid(_id)) {
-//       return res.status(400).json({ success: false, error: "Invalid quizId" });
-//     }
-
-//     // Fetch quizzes with impressions
-//     const quiz = await Quiz.findOne({ _id });
-//     quiz.impressionofQuiz += 1;
-//     const result = await Quiz.findByIdAndUpdate(_id, quiz);
-//     res.json({ quiz });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
 
 router.post("/updateQuiz", async (req, res) => {
   try {
@@ -153,7 +121,6 @@ router.post("/updateQuiz", async (req, res) => {
       return res.status(400).json({ error: "Quiz ID is required" });
     }
 
-    // Ensure that quiz._id is properly set to a valid ObjectId
     if (!mongoose.Types.ObjectId.isValid(quiz._id)) {
       return res.status(400).json({ success: false, error: "Invalid quizId" });
     }
@@ -175,17 +142,14 @@ router.post("/updateQuiz", async (req, res) => {
   }
 });
 
-// API endpoint to delete a quiz by its ID
 router.delete("/deleteQuiz/:quizId", requireAuth, async (req, res) => {
   try {
     const quizId = req.params.quizId;
 
-    // Ensure that quizId is properly set to a valid ObjectId
     if (!mongoose.Types.ObjectId.isValid(quizId)) {
       return res.status(400).json({ success: false, error: "Invalid quizId" });
     }
 
-    // Find the quiz by ID and delete it
     const deletedQuiz = await Quiz.findByIdAndDelete(quizId);
     if (!deletedQuiz) {
       return res.status(404).json({ error: "Quiz not found" });
@@ -200,30 +164,24 @@ router.delete("/deleteQuiz/:quizId", requireAuth, async (req, res) => {
   }
 });
 
-// PATCH endpoint for updating a quiz
 router.patch("/editQuiz/:quizId", requireAuth, async (req, res) => {
   try {
     const quizId = req.params.quizId;
     const { questions } = req.body;
 
-    // Ensure that quizId is properly set to a valid ObjectId
     if (!mongoose.Types.ObjectId.isValid(quizId)) {
       return res.status(400).json({ success: false, error: "Invalid quizId" });
     }
 
-    // Find the quiz by quizId in the database
     const quiz = await Quiz.findById(quizId);
     if (!quiz) {
       return res.status(404).json({ success: false, error: "Quiz not found" });
     }
 
-    // Update only the questions and options values
     quiz.questions = questions;
 
-    // Save the updated quiz
     const updatedQuiz = await quiz.save();
 
-    // Send success response with updated quiz data
     res.status(200).json({ success: true, updatedQuiz });
   } catch (error) {
     console.error(error);

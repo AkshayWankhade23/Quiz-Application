@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -21,12 +20,11 @@ function LiveQuiz() {
           `${server}api/quiz/get-live-quiz/${quizId}`
         );
         const data = response.data;
-        console.log(data.quiz);
         if (data) {
           setQuizData({
             ...data.quiz,
           });
-          console.log(data.quiz.questions[0].timer, "Timer");
+          // console.log(data.quiz.questions[0].timer, "Timer");
           const initialTimer = data.quiz.questions[0].timer;
           setTimer(initialTimer === "OFF" ? null : parseInt(initialTimer));
         } else {
@@ -36,7 +34,7 @@ function LiveQuiz() {
         console.error(error);
       }
     };
-  
+
     fetchQuizData();
   }, [quizId]);
 
@@ -44,14 +42,11 @@ function LiveQuiz() {
     if (quizCompleted) {
       const sendQuizDataToBackend = async () => {
         try {
-          const response = await axios.post(
-            `${server}api/quiz/updateQuiz`,
-            {
-              quizData,
-            }
-          );
+          const response = await axios.post(`${server}api/quiz/updateQuiz`, {
+            quizData,
+          });
 
-          console.log(response.data); 
+          // console.log(response.data);
         } catch (error) {
           console.error("Error sending quiz data to backend:", error);
         }
@@ -73,7 +68,6 @@ function LiveQuiz() {
 
   useEffect(() => {
     if (quizData && timer === null) {
-
       const initialTimer = quizData.questions[0].timer;
       setTimer(initialTimer === "OFF" ? null : parseInt(initialTimer));
     }
@@ -95,25 +89,23 @@ function LiveQuiz() {
       const selectedOption = currentQuestion.options[optionIndex];
       if (!selectedOption.selected) {
         selectedOption.impressionofOption += 1;
-        selectedOption.selected = true; // Mark the option as selected
+        selectedOption.selected = true;
       }
       setQuizData(updatedQuizData);
-  
+
       return updatedOptions;
     });
   };
-  
+
   const handleNextClick = () => {
     if (quizData && currentQuestionIndex < quizData.numQuestions - 1) {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
 
       setTimer(parseInt(quizData.questions[currentQuestionIndex + 1].timer));
     } else {
-
       setQuizCompleted(true);
     }
   };
-
 
   const calculateScore = () => {
     let score = 0;
@@ -187,8 +179,7 @@ function LiveQuiz() {
               {currentOption.option.split("***")[0]}
             </div>
             <div className={style.both_option_text}>
-              {/* why csss is not getting applied to this image i want to reduce the size of image and it should fit inside parent div */}
-              <img 
+              <img
                 className={style.both_option_img}
                 src={currentOption.option.split("***")[1]}
                 alt="option_image"
@@ -218,7 +209,7 @@ function LiveQuiz() {
               Your Score is {score}/{quizData.numQuestions}
             </p>
           </div>
-          {console.log(quizData)}
+          {/* {console.log(quizData)} */}
         </div>
       );
     }
@@ -230,7 +221,7 @@ function LiveQuiz() {
               Thank you for participating in the Poll
             </p>
           </div>
-          {console.log(quizData)}
+          {/* {console.log(quizData)} */}
         </div>
       );
     }
@@ -244,7 +235,6 @@ function LiveQuiz() {
             currentQuestionIndex + 1
           }/${quizData.numQuestions}`}</div>
           {timer !== null && quizData.quizType === "qa" && (
-
             <div className={style.timer}>{timer ? timer + "s" : " "}</div>
           )}
 

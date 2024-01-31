@@ -1,18 +1,17 @@
-
 const mongoose = require("mongoose");
 const User = require("./user");
 
 const quizSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User", 
+    ref: "User",
     required: true,
   },
   quizName: { type: String, required: true },
-  quizType: { 
-    type: String, 
+  quizType: {
+    type: String,
     required: true,
-    enum: ['qa', 'poll']
+    enum: ["qa", "poll"],
   },
   numQuestions: Number,
   questions: [
@@ -23,12 +22,12 @@ const quizSchema = new mongoose.Schema({
           option: { type: String, required: true },
           impressionofOption: Number,
         },
-      ], 
-      correctOption: Number, 
-      optionType: { 
-        type: String, 
+      ],
+      correctOption: Number,
+      optionType: {
+        type: String,
         required: true,
-        enum: ['text', 'image', 'both'] 
+        enum: ["text", "image", "both"],
       },
       timer: { type: String },
       impressionofQuestion: {
@@ -49,4 +48,3 @@ const quizSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("Quiz", quizSchema);
-

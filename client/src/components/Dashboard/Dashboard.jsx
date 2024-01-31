@@ -79,7 +79,7 @@ const Dashboard = () => {
                   {quiz.quizName}
                 </div>
                 <div className={style.dashboard_quiz_card_num}>
-                  {quiz.impressionofQuiz }
+                  {quiz.impressionofQuiz}
                   <img
                     className={style.eye_img}
                     src={eye_logo}
