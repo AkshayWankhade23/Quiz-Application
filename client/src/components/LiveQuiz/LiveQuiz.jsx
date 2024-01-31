@@ -187,7 +187,7 @@ function LiveQuiz() {
               {currentOption.option.split("***")[0]}
             </div>
             <div className={style.both_option_text}>
-              why csss is not getting applied to this image i want to reduce the size of image and it should fit inside parent div
+              {/* why csss is not getting applied to this image i want to reduce the size of image and it should fit inside parent div */}
               <img 
                 className={style.both_option_img}
                 src={currentOption.option.split("***")[1]}
