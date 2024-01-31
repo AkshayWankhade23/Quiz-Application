@@ -49,7 +49,7 @@ const DashboardPage = () => {
         <br />
         <button
           onClick={() => (activeTab === 4 ? setActiveTab(2) : setActiveTab(4))}
-          className={`${style.button} ${activeTab === 2 && style.active}`}
+          className={`${style.button} ${(activeTab === 2 || activeTab === 4) && style.active}`}
         >
           Analytics
         </button>{" "}
