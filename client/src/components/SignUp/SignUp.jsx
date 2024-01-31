@@ -24,11 +24,6 @@ const Signup = () => {
     try {
       const response = await axios.post(`${server}api/user/signup`, formData);
 
-      const { token, userId } = response.data;
-
-      localStorage.setItem("token", token);
-      localStorage.setItem("userId", userId);
-
       navigate("/login");
       toast.success("Signup successful!");
     } catch (error) {

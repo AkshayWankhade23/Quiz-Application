@@ -24,10 +24,15 @@ const QuestionAnalytics = ({ quizId }) => {
     fetchDashboardData();
   }, []);
 
+  function formatDate(dateString) {
+    const options = { day: "numeric", month: "short", year: "numeric" };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  }
+
   return (
     <div className={style.container}>
       <h2>{currentquiz.quizName} Question Analysis</h2>
-      <p className={style.red}>Created on: {currentquiz.date}</p>
+      <p className={style.red}>Created on: {formatDate(currentquiz.date)}</p>
       <br />
       <p className={style.red}>Impressions: {currentquiz.impressionofQuiz}</p>
       {quiztype === "poll" ? (
