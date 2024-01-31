@@ -198,7 +198,7 @@ const CreateQuiz = ({ handleClosePopup }) => {
   const handleSubmit = async () => {
     const token = window.localStorage.getItem("token");
     if (!token) {
-      toast.error("Login to create a job");
+      toast.error("Login to create a Quiz");
       return;
     }
     const currentQuestion = quizData.questions[currentQuestionIndex];

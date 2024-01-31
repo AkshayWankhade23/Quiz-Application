@@ -77,7 +77,7 @@ const QuizAnalysis = () => {
   const handleDeleteQuiz = async (quizId) => {
     const token = window.localStorage.getItem("token");
     if (!token) {
-      toast.error("Login to create a job");
+      toast.error("Login to delete a Quiz");
       return;
     }
 
