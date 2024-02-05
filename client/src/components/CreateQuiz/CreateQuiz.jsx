@@ -43,7 +43,7 @@ const CreateQuiz = ({ handleClosePopup }) => {
         timer: "OFF",
       })),
     }));
-  }, [quizData]);
+  }, []);
 
   const handleQuizNameChange = (e) => {
     setQuizData({ ...quizData, quizName: e.target.value });
