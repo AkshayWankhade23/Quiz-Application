@@ -139,8 +139,8 @@ const CreateQuiz = ({ handleClosePopup }) => {
             { option: "", impressionofOption: 0 },
           ],
           correctOption: null,
-          optionType: "",
-          timer: "",
+          optionType: "text",
+          timer: "OFF",
         },
       ],
     });
@@ -426,12 +426,9 @@ const CreateQuiz = ({ handleClosePopup }) => {
                               e
                             )
                           }
-                          className={
-                            quizData.questions[currentQuestionIndex]
-                              .correctOption === optionIndex
-                              ? style.selected
-                              : style.txt_img
-                          }
+                          className={`${quizData.quizType === "qa" ? style.text_image_qa : style.text_image_poll} ${
+                            quizData.questions[currentQuestionIndex].correctOption === optionIndex ? style.selected : style.txt_img
+                          }`}
                         />
                         <input
                           type="link"
@@ -450,12 +447,9 @@ const CreateQuiz = ({ handleClosePopup }) => {
                               e
                             )
                           }
-                          className={
-                            quizData.questions[currentQuestionIndex]
-                              .correctOption === optionIndex
-                              ? style.selected
-                              : style.txt_img
-                          }
+                          className={`${quizData.quizType === "qa" ? style.text_image_qa : style.text_image_poll} ${
+                            quizData.questions[currentQuestionIndex].correctOption === optionIndex ? style.selected : style.txt_img
+                          }`}
                         />
                       </div>
                     ) : quizData.questions[currentQuestionIndex].optionType ===
